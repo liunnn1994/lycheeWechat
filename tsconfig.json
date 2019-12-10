@@ -9,6 +9,7 @@
     "noImplicitAny": false,
     "allowSyntheticDefaultImports": true,
     "outDir": "lib",
+    "lib": ["dom"],
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "strictNullChecks": true,
