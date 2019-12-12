@@ -41,6 +41,9 @@ export default class GalleryDetails extends Component<IProps, IState> {
     enablePullDownRefresh: true,
     onReachBottomDistance: 150
   };
+  static options = {
+    addGlobalClass: true
+  };
   constructor(props: IProps) {
     super(props);
     this.state = {
