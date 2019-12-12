@@ -22,6 +22,7 @@ interface IState {
   status: "loading" | "noMore" | "more" | undefined;
   value: string;
   photos: any[];
+  allPhotosUrl: string[];
   timer: any;
   url: string;
   scrollViewHeight: number;
@@ -55,6 +56,7 @@ export default class GalleryDetails extends Component<IProps, IState> {
       value: "",
       url: "https://image.2077tech.com/",
       photos: [],
+      allPhotosUrl: [],
       timer: null,
       loadData: {
         allArr: [],
@@ -94,7 +96,7 @@ export default class GalleryDetails extends Component<IProps, IState> {
       message: "时光机加载中，请稍后！",
       type: "info"
     });
-    const { timer } = this.state;
+    const { timer, url } = this.state;
     clearInterval(timer);
     getImagesByAlbumID(id)
       .then(res => {
@@ -115,7 +117,8 @@ export default class GalleryDetails extends Component<IProps, IState> {
         });
         this.setState({
           loadData,
-          photos: loadData.loadArr
+          photos: loadData.loadArr,
+          allPhotosUrl: photos.map(photo => `${url}${photo.url}`)
         });
         Taro.stopPullDownRefresh();
         Taro.atMessage({
@@ -139,7 +142,7 @@ export default class GalleryDetails extends Component<IProps, IState> {
     const { url } = this.state;
     Taro.previewImage({
       current: `${url}${photo.url}`, // 当前显示图片的http链接
-      urls: this.state.photos.map(photo => `${url}${photo.url}`) // 需要预览的图片http链接列表
+      urls: this.state.allPhotosUrl // 需要预览的图片http链接列表
     });
   }
   onChangeSearch(value: string) {
