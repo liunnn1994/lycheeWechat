@@ -11,8 +11,7 @@ import {
 import { logIn } from "../../api/user";
 import "./index.scss";
 
-interface IProps {
-}
+interface IProps {}
 interface IState {
   isLogin: boolean;
   redirectLoading: boolean;
@@ -189,7 +188,7 @@ export default class Index extends Component<IProps, IState> {
     return (
       <View>
         <AtModal isOpened={!isLogin} closeOnClickOverlay={false}>
-          <AtModalHeader>标题</AtModalHeader>
+          <AtModalHeader>欢迎来到刘家大院</AtModalHeader>
           <AtModalContent>
             <AtInput
               className={userErrorClass}
