@@ -11,7 +11,8 @@ import {
   AtModal,
   AtModalHeader,
   AtModalContent,
-  AtModalAction
+  AtModalAction,
+  AtNoticebar
 } from "taro-ui";
 import { getAlbums } from "../../api/gallery";
 import "./index.scss";
@@ -175,6 +176,9 @@ export default class Gallery extends Component<IProps, IState> {
     const { fetchGalleryLoading, albums, url, showReLogin } = this.state;
     return (
       <View>
+        <AtNoticebar marquee>
+          图片较大，加载请耐心等待。相册使用卷积神经网络把老照片放大到4K，然后使用NoGAN训练模型把黑白和褪色的照片进项32位深上色。
+        </AtNoticebar>
         <AtMessage />
         <AtSearchBar
           placeholder="搜索相册名称"
