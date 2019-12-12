@@ -37,7 +37,7 @@ export default class Index extends Component<IProps, IState> {
    */
   // eslint-disable-next-line react/sort-comp
   config: Config = {
-    navigationBarTitleText: "首页"
+    navigationBarTitleText: "刘家大院"
   };
   constructor(props: IProps) {
     super(props);
