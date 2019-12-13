@@ -8,9 +8,12 @@ import {
   AtModalAction,
   AtModal,
   AtLoadMore,
-  AtFab
+  AtFab,
+  AtTabBar,
+  AtActionSheet,
+  AtActionSheetItem
 } from "taro-ui";
-import { getImagesByAlbumID } from "../../api/gallery";
+import { getImagesByAlbumID, delPhotos } from "../../api/gallery";
 import { lazyLoad } from "../../utils/public";
 import "./index.scss";
 
@@ -20,10 +23,13 @@ interface IState {
   showReLogin: boolean;
   isClose: boolean;
   isPre: boolean;
+  showBottomTabBar: boolean;
+  showDelSheet: boolean;
   title: string;
   status: "loading" | "noMore" | "more" | undefined;
   value: string;
   photos: any[];
+  tabList: any[];
   allPhotosUrl: string[];
   timer: any;
   url: string;
@@ -52,6 +58,8 @@ export default class GalleryDetails extends Component<IProps, IState> {
     this.state = {
       id: "",
       showReLogin: false,
+      showBottomTabBar: false,
+      showDelSheet: false,
       isClose: true,
       isPre: false,
       scrollViewHeight: 0,
@@ -61,6 +69,21 @@ export default class GalleryDetails extends Component<IProps, IState> {
       url: "https://image.2077tech.com/",
       photos: [],
       allPhotosUrl: [],
+      tabList: [
+        {
+          title: "取消选择",
+          iconType: "close",
+          actionType: "cancel",
+          key: 0
+        },
+        {
+          title: "删除",
+          iconType: "trash",
+          actionType: "del",
+          text: "0",
+          key: 1
+        }
+      ],
       timer: null,
       loadData: {
         allArr: [],
@@ -115,8 +138,9 @@ export default class GalleryDetails extends Component<IProps, IState> {
         if (res.data.photos !== false) {
           photos = res.data.photos.map(photo => ({
             thumbUrl: photo.thumbUrl,
+            id: photo.id,
             url: photo.url,
-            showClassName: true
+            selected: false
           }));
         }
         let obj = {
@@ -169,14 +193,28 @@ export default class GalleryDetails extends Component<IProps, IState> {
     });
   }
   handleClickImage(photo) {
-    const { url } = this.state;
-    this.setState({
-      isPre: true
-    });
-    Taro.previewImage({
-      current: `${url}${photo.url}`, // 当前显示图片的http链接
-      urls: this.state.allPhotosUrl // 需要预览的图片http链接列表
-    });
+    const { url, showBottomTabBar } = this.state;
+    if (showBottomTabBar) {
+      let photos = [...this.state.photos];
+      let clickPhoto = photos.find(pt => pt.id === photo.id);
+      clickPhoto.selected = !clickPhoto.selected;
+      let selectedPhotos = photos.filter(photo => photo.selected);
+      let tabList = [...this.state.tabList];
+      tabList.find(tab => tab.actionType === "del").text =
+        selectedPhotos.length;
+      this.setState({
+        tabList,
+        photos
+      });
+    } else {
+      this.setState({
+        isPre: true
+      });
+      Taro.previewImage({
+        current: `${url}${photo.url}`, // 当前显示图片的http链接
+        urls: this.state.allPhotosUrl // 需要预览的图片http链接列表
+      });
+    }
   }
   onChangeSearch(value: string) {
     this.setState({
@@ -202,8 +240,81 @@ export default class GalleryDetails extends Component<IProps, IState> {
       url: `/pages/addPhotos/index?id=${id}&title=${title}`
     });
   }
+  handleClickTabBar(index: number) {
+    const { tabList } = this.state;
+    switch (tabList[index].actionType) {
+      case "cancel":
+        let { photos } = this.state;
+        photos.forEach(photo => {
+          photo.selected = false;
+        });
+        this.setState({
+          photos
+        });
+        this.setState({
+          showBottomTabBar: false
+        });
+        break;
+      case "del":
+        this.setState({
+          showDelSheet: true
+        });
+        break;
+    }
+  }
+  handleSelect(index: number) {
+    let photos = [...this.state.photos];
+    photos[index].selected = !photos[index].selected;
+    let selectedPhotos = photos.filter(photo => photo.selected);
+    let tabList = [...this.state.tabList];
+    tabList.find(tab => tab.actionType === "del").text = selectedPhotos.length;
+    this.setState({
+      photos,
+      showBottomTabBar: true,
+      tabList
+    });
+  }
+  delAllSelectPhotos() {
+    delPhotos(
+      String(
+        this.state.photos.filter(photo => photo.selected).map(photo => photo.id)
+      )
+    ).then(res => {
+      if (res.data) {
+        Taro.atMessage({
+          message: "删除成功！",
+          type: "success"
+        });
+      } else {
+        Taro.atMessage({
+          message: "删除失败！",
+          type: "error"
+        });
+      }
+      this.getAllImages(this.state.id, true);
+    });
+    this.setState({
+      showDelSheet: false,
+      showBottomTabBar: false
+    });
+  }
+  handleCloseSheet() {
+    this.setState({
+      showDelSheet: false
+    });
+  }
   render() {
-    const { photos, url, showReLogin, status, scrollViewHeight } = this.state;
+    const {
+      photos,
+      url,
+      showReLogin,
+      status,
+      scrollViewHeight,
+      showBottomTabBar,
+      tabList,
+      showDelSheet
+    } = this.state;
+    console.log(showDelSheet);
     return (
       <View>
         <AtMessage />
@@ -225,11 +336,15 @@ export default class GalleryDetails extends Component<IProps, IState> {
         >
           <View className="at-row at-row--wrap">
             {photos.map((photo, index) => {
+              const className = `at-col galleryItems zoomInDown animated ${
+                photo.selected ? "selected" : ""
+              }`;
               return (
                 <View
-                  className="at-col galleryItems zoomInDown animated"
+                  className={className}
                   key={index}
                   onClick={this.handleClickImage.bind(this, photo)}
+                  onLongPress={this.handleSelect.bind(this, index)}
                 >
                   <Image
                     mode="aspectFill"
@@ -258,6 +373,23 @@ export default class GalleryDetails extends Component<IProps, IState> {
             />
           </AtFab>
         </View>
+        {showBottomTabBar ? (
+          <AtTabBar
+            fixed
+            tabList={tabList}
+            onClick={this.handleClickTabBar.bind(this)}
+            current={-1}
+          />
+        ) : null}
+        <AtActionSheet
+          isOpened={showDelSheet}
+          title="是否要删除所选照片？删除后不可恢复！"
+          onClose={this.handleCloseSheet.bind(this)}
+        >
+          <AtActionSheetItem onClick={this.delAllSelectPhotos.bind(this)}>
+            <Text style="color:red">删除照片</Text>
+          </AtActionSheetItem>
+        </AtActionSheet>
       </View>
     );
   }

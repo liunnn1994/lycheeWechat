@@ -66,3 +66,17 @@ export const addPhoto = (albumID: string, filePath: string) => {
     }
   });
 };
+
+/**
+ * @description 删除图片
+ * @param {String} photoIDs - 删除图片ID的集合
+ * */
+export const delPhotos = (photoIDs: string) => {
+  return request.post(
+    "https://image.2077tech.com/php/index.php",
+    qs.stringify({
+      function: "Photo::delete",
+      photoIDs
+    })
+  );
+};

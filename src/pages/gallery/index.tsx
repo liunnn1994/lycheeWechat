@@ -160,7 +160,7 @@ export default class Gallery extends Component<IProps, IState> {
       }
     }
     this.setState({
-      showCreateAlbum: bool
+      showCreateAlbum: false
     });
   }
   handleChangeAlbumName(newAlbumName) {
