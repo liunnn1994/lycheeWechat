@@ -45,7 +45,7 @@ export const addAlbum = (title: string, parent_id: number = 0) => {
     })
   );
 };
-// Photo::add
+
 /**
  * @description 添加图片到相册
  * @param {String} albumID - 相册ID
