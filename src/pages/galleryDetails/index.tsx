@@ -1,5 +1,5 @@
 import Taro, { Component, Config } from "@tarojs/taro";
-import { ScrollView, View, Image, Button } from "@tarojs/components";
+import { ScrollView, View, Image, Button, Text } from "@tarojs/components";
 import {
   AtSearchBar,
   AtMessage,
@@ -7,7 +7,8 @@ import {
   AtModalContent,
   AtModalAction,
   AtModal,
-  AtLoadMore
+  AtLoadMore,
+  AtFab
 } from "taro-ui";
 import { getImagesByAlbumID } from "../../api/gallery";
 import { lazyLoad } from "../../utils/public";
@@ -105,21 +106,30 @@ export default class GalleryDetails extends Component<IProps, IState> {
           });
           return false;
         }
-        let photos = res.data.photos.map(photo => ({
-          thumbUrl: photo.thumbUrl,
-          url: photo.url,
-          showClassName: true
-        }));
+        let photos = [];
+        if (res.data.photos !== false) {
+          photos = res.data.photos.map(photo => ({
+            thumbUrl: photo.thumbUrl,
+            url: photo.url,
+            showClassName: true
+          }));
+        }
         const loadData = lazyLoad({
           ...this.state.loadData,
           allArr: photos
         });
-        this.setState({
-          loadData,
-          photos: loadData.loadArr,
-          allPhotosUrl: photos.map(photo => `${url}${photo.url}`)
-        });
+        this.setState(
+          {
+            loadData,
+            photos: loadData.loadArr,
+            allPhotosUrl: photos.map(photo => `${url}${photo["url"]}`)
+          },
+          () => {
+            this.handleLoadMore();
+          }
+        );
         Taro.stopPullDownRefresh();
+
         Taro.atMessage({
           message: "欢迎来到刘家大院！",
           type: "success"
@@ -161,6 +171,12 @@ export default class GalleryDetails extends Component<IProps, IState> {
         photos: lazyLoad(loadData).loadArr
       });
     }
+  }
+  handleAddAlbum() {
+    const { id, title } = this.state;
+    Taro.navigateTo({
+      url: `/pages/addPhotos/index?id=${id}&title=${title}`
+    });
   }
   render() {
     const { photos, url, showReLogin, status, scrollViewHeight } = this.state;
@@ -210,6 +226,14 @@ export default class GalleryDetails extends Component<IProps, IState> {
             <Button onClick={this.handleReLogin}>确定</Button>
           </AtModalAction>
         </AtModal>
+        <View className="fab-box">
+          <AtFab>
+            <Text
+              className="at-fab__icon at-icon at-icon-add-circle"
+              onClick={this.handleAddAlbum.bind(this)}
+            />
+          </AtFab>
+        </View>
       </View>
     );
   }
