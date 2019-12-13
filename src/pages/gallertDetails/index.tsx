@@ -1,9 +1,8 @@
 import Taro, { Component, Config } from "@tarojs/taro";
-import { ScrollView, View, Image, Text, Button } from "@tarojs/components";
+import { ScrollView, View, Image, Button } from "@tarojs/components";
 import {
   AtSearchBar,
   AtMessage,
-  AtFab,
   AtModalHeader,
   AtModalContent,
   AtModalAction,
@@ -151,12 +150,6 @@ export default class GalleryDetails extends Component<IProps, IState> {
     });
   }
   onActionClick() {}
-  handleAddImage() {
-    Taro.atMessage({
-      message: "上传图片暂未制作！",
-      type: "info"
-    });
-  }
   handleLoadMore() {
     const { loadData } = this.state;
     if (loadData.finished) {
@@ -210,14 +203,6 @@ export default class GalleryDetails extends Component<IProps, IState> {
           </View>
           <AtLoadMore status={status} />
         </ScrollView>
-        <View className="fab-box">
-          <AtFab>
-            <Text
-              className="at-fab__icon at-icon at-icon-add-circle"
-              onClick={this.handleAddImage.bind(this)}
-            />
-          </AtFab>
-        </View>
         <AtModal isOpened={showReLogin}>
           <AtModalHeader>提示</AtModalHeader>
           <AtModalContent>登录失效，请重新登录！</AtModalContent>

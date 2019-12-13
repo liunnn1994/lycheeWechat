@@ -1,13 +1,12 @@
 // eslint-disable-next-line no-unused-vars
 import Taro, { Component, Config } from "@tarojs/taro";
-import { Text, View, Button } from "@tarojs/components";
+import { View, Button } from "@tarojs/components";
 import {
   AtToast,
   AtList,
   AtListItem,
   AtSearchBar,
   AtMessage,
-  AtFab,
   AtModal,
   AtModalHeader,
   AtModalContent,
@@ -64,12 +63,6 @@ export default class Gallery extends Component<IProps, IState> {
       url: "https://image.2077tech.com/",
       timer: null
     };
-  }
-  handleAddAlbum() {
-    Taro.atMessage({
-      message: "上传图片暂未制作！",
-      type: "info"
-    });
   }
   onPullDownRefresh() {
     // 下拉开始
@@ -201,14 +194,6 @@ export default class Gallery extends Component<IProps, IState> {
             />
           ))}
         </AtList>
-        <View className="fab-box">
-          <AtFab>
-            <Text
-              className="at-fab__icon at-icon at-icon-add-circle"
-              onClick={this.handleAddAlbum.bind(this)}
-            />
-          </AtFab>
-        </View>
         <AtToast
           duration={0}
           hasMask
