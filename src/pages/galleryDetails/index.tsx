@@ -18,6 +18,8 @@ interface IProps {}
 interface IState {
   id: string;
   showReLogin: boolean;
+  isClose: boolean;
+  isPre: boolean;
   title: string;
   status: "loading" | "noMore" | "more" | undefined;
   value: string;
@@ -50,6 +52,8 @@ export default class GalleryDetails extends Component<IProps, IState> {
     this.state = {
       id: "",
       showReLogin: false,
+      isClose: true,
+      isPre: false,
       scrollViewHeight: 0,
       title: "",
       status: "loading",
@@ -76,6 +80,7 @@ export default class GalleryDetails extends Component<IProps, IState> {
       this.setState({
         id,
         title,
+        isClose: false,
         scrollViewHeight:
           Taro.getSystemInfoSync().windowHeight -
           res.find(item => item.id === "search").height
@@ -89,9 +94,9 @@ export default class GalleryDetails extends Component<IProps, IState> {
   }
   onPullDownRefresh() {
     // 下拉开始
-    this.getAllImages(this.state.id);
+    this.getAllImages(this.state.id, true);
   }
-  getAllImages(id: string) {
+  getAllImages(id: string, refresh: boolean = false) {
     Taro.atMessage({
       message: "时光机加载中，请稍后！",
       type: "info"
@@ -114,10 +119,14 @@ export default class GalleryDetails extends Component<IProps, IState> {
             showClassName: true
           }));
         }
-        const loadData = lazyLoad({
+        let obj = {
           ...this.state.loadData,
           allArr: photos
-        });
+        };
+        if (refresh) {
+          obj.loadArr = [];
+        }
+        const loadData = lazyLoad(obj);
         this.setState(
           {
             loadData,
@@ -142,6 +151,18 @@ export default class GalleryDetails extends Component<IProps, IState> {
         });
       });
   }
+  componentDidShow(): void {
+    const { isPre, isClose, id } = this.state;
+    if (!isClose && !isPre) {
+      this.getAllImages(id, true);
+    }
+    if (isPre) {
+      this.setState({
+        isPre: false
+      });
+    }
+  }
+
   handleReLogin() {
     Taro.reLaunch({
       url: "/pages/index/index"
@@ -149,6 +170,9 @@ export default class GalleryDetails extends Component<IProps, IState> {
   }
   handleClickImage(photo) {
     const { url } = this.state;
+    this.setState({
+      isPre: true
+    });
     Taro.previewImage({
       current: `${url}${photo.url}`, // 当前显示图片的http链接
       urls: this.state.allPhotosUrl // 需要预览的图片http链接列表
