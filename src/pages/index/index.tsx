@@ -122,12 +122,9 @@ export default class Index extends Component<IProps, IState> {
           });
         }
       })
-      .catch(err => {
+      .catch(() => {
         this.setState({
-          loginLoading: false,
-          loginText: `服务器错误：${err.message}`,
-          loginIcon: "error",
-          redirectLoading: true
+          loginLoading: false
         });
       });
   }

@@ -119,48 +119,44 @@ export default class Gallery extends Component<IProps, IState> {
     this.message("时光机加载中，请稍后！");
     const { timer } = this.state;
     clearInterval(timer);
-    getAlbums()
-      .then(res => {
-        if (res.data.albums === undefined) {
-          this.setState({
-            showReLogin: true
-          });
+    getAlbums().then(res => {
+      if (res.data.albums === undefined) {
+        this.setState({
+          showReLogin: true
+        });
+        return false;
+      }
+      let albums = res.data.albums.map(album => ({
+        ...album,
+        showClassName: false
+      }));
+      this.setState({
+        fetchGalleryLoading: false,
+        albums,
+        albumsData: albums
+      });
+      Taro.stopPullDownRefresh();
+      this.message("欢迎来到刘家大院！", "success");
+      let len = albums.length;
+      let i = 0;
+      let timer = setInterval(() => {
+        if (i > len - 1) {
+          clearInterval(timer);
           return false;
         }
-        let albums = res.data.albums.map(album => ({
-          ...album,
-          showClassName: false
-        }));
+        let albums = this.state.albums;
+        albums[i].showClassName = true;
         this.setState({
           fetchGalleryLoading: false,
-          albums,
-          albumsData: albums
+          albums
         });
-        Taro.stopPullDownRefresh();
-        this.message("欢迎来到刘家大院！", "success");
-        let len = albums.length;
-        let i = 0;
-        let timer = setInterval(() => {
-          if (i > len - 1) {
-            clearInterval(timer);
-            return false;
-          }
-          let albums = this.state.albums;
-          albums[i].showClassName = true;
-          this.setState({
-            fetchGalleryLoading: false,
-            albums
-          });
-          i++;
-        }, 100);
-        this.setState({
-          fetchGalleryLoading: false,
-          timer
-        });
-      })
-      .catch(err => {
-        this.message(`加载失败！${err.message}`, "error");
+        i++;
+      }, 100);
+      this.setState({
+        fetchGalleryLoading: false,
+        timer
       });
+    });
   }
   handleClickAlbum(al: { id: string; title: string }) {
     Taro.navigateTo({

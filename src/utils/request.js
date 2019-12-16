@@ -1,5 +1,5 @@
 import Taro from "@tarojs/taro";
-
+const img = require("../static/netError.gif");
 const Fly = require("./wx");
 const request = new Fly();
 
@@ -19,10 +19,16 @@ request.interceptors.response.use(
   err => {
     //发生网络错误后会走到这里
     let errorLog = Taro.getStorageSync("errorLog")
-      ? Taro.getStorageSync("errorLog")
+      ? JSON.parse(Taro.getStorageSync("errorLog"))
       : [];
-    errorLog.push(errorLog);
-    Taro.setStorageSync("errorLog", errorLog);
+    errorLog.push(err);
+    Taro.setStorageSync("errorLog", JSON.stringify(errorLog));
+    Taro.showToast({
+      title: `网络错误！`,
+      icon: "none",
+      image: img,
+      duration: 2000
+    });
   }
 );
 

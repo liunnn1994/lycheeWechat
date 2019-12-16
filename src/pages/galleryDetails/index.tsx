@@ -168,12 +168,6 @@ export default class GalleryDetails extends Component<IProps, IState> {
           type: "success"
         });
       })
-      .catch(err => {
-        Taro.atMessage({
-          message: `加载失败！${err.message}`,
-          type: "error"
-        });
-      });
   }
   componentDidShow(): void {
     const { isPre, isClose, id } = this.state;
