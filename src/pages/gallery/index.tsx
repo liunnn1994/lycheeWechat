@@ -159,7 +159,7 @@ export default class Gallery extends Component<IProps, IState> {
         });
       })
       .catch(err => {
-        this.message(`加载失败！${err}`, "error");
+        this.message(`加载失败！${err.message}`, "error");
       });
   }
   handleClickAlbum(al: { id: string; title: string }) {
@@ -168,7 +168,6 @@ export default class Gallery extends Component<IProps, IState> {
     });
   }
   componentWillMount() {
-    console.log(Taro.getStorageSync("showNoticeAgain"));
     this.setState({
       showNoticeAgain: Taro.getStorageSync("showNoticeAgain")
     });
@@ -311,6 +310,11 @@ export default class Gallery extends Component<IProps, IState> {
     });
     Taro.setStorageSync("showNoticeAgain", val);
   }
+  handleCloseToast(key) {
+    let obj = {};
+    obj[key] = false;
+    this.setState(obj);
+  }
   render() {
     const {
       fetchGalleryLoading,
@@ -368,6 +372,7 @@ export default class Gallery extends Component<IProps, IState> {
           isOpened={fetchGalleryLoading}
           text="相册加载中"
           status="loading"
+          onClose={this.handleCloseToast.bind(this, "fetchGalleryLoading")}
         />
         <AtModal isOpened={showReLogin}>
           <AtModalHeader>提示</AtModalHeader>

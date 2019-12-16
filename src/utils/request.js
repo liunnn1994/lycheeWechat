@@ -19,7 +19,7 @@ request.interceptors.response.use(
   err => {
     //发生网络错误后会走到这里
     Taro.showToast({
-      title: `${err},网络连接失败！`,
+      title: `${err.message},网络连接失败！`,
       icon: "none",
       mask: true,
       duration: 1000

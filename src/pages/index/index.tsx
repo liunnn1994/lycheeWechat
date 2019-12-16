@@ -73,11 +73,6 @@ export default class Index extends Component<IProps, IState> {
       );
     }
   }
-  componentWillUnmount() {}
-
-  componentDidShow() {}
-
-  componentDidHide() {}
   closeError() {
     this.setState({
       showError: false,
@@ -121,7 +116,7 @@ export default class Index extends Component<IProps, IState> {
           }, 1000);
         } else {
           this.setState({
-            loginText: `登陆失败，请重试！`,
+            loginText: `密码错误，请重试！`,
             redirectLoading: true,
             loginIcon: "error"
           });
@@ -130,7 +125,7 @@ export default class Index extends Component<IProps, IState> {
       .catch(err => {
         this.setState({
           loginLoading: false,
-          loginText: `服务器错误：${err}`,
+          loginText: `服务器错误：${err.message}`,
           loginIcon: "error",
           redirectLoading: true
         });
@@ -170,6 +165,11 @@ export default class Index extends Component<IProps, IState> {
     let state = {};
     state[type] = val;
     this.setState(state);
+  }
+  handleCloseToast(key) {
+    let obj = {};
+    obj[key] = false;
+    this.setState(obj);
   }
   render() {
     const {
@@ -219,6 +219,7 @@ export default class Index extends Component<IProps, IState> {
           isOpened={showError}
           text={errorText}
           icon="close-circle"
+          onClose={this.handleCloseToast.bind(this, "showError")}
         />
         <AtToast
           duration={0}
@@ -227,6 +228,7 @@ export default class Index extends Component<IProps, IState> {
           status="loading"
           text="登陆中，请稍后。"
           icon="loading"
+          onClose={this.handleCloseToast.bind(this, "loginLoading")}
         />
         <AtToast
           duration={0}
@@ -234,6 +236,7 @@ export default class Index extends Component<IProps, IState> {
           isOpened={redirectLoading}
           text={loginText}
           status={loginIcon}
+          onClose={this.handleCloseToast.bind(this, "redirectLoading")}
         />
       </View>
     );

@@ -170,7 +170,7 @@ export default class GalleryDetails extends Component<IProps, IState> {
       })
       .catch(err => {
         Taro.atMessage({
-          message: `加载失败！${err}`,
+          message: `加载失败！${err.message}`,
           type: "error"
         });
       });

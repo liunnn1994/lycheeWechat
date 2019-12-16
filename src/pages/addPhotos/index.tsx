@@ -93,6 +93,11 @@ export default class AddPhotos extends Component<IProps, IState> {
       this.handleUpload(file, id, files, index + 1, errorCount);
     });
   }
+  handleCloseToast(key) {
+    let obj = {};
+    obj[key] = false;
+    this.setState(obj);
+  }
   render() {
     const {
       files,
@@ -132,6 +137,7 @@ export default class AddPhotos extends Component<IProps, IState> {
             100
           ).toFixed(2)}%)`}
           status="loading"
+          onClose={this.handleCloseToast.bind(this, "isUploading")}
         />
       </View>
     );
