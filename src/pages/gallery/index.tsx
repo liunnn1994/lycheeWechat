@@ -340,23 +340,27 @@ export default class Gallery extends Component<IProps, IState> {
           onActionClick={this.onActionClick.bind(this)}
         />
         <AtList>
-          {albums.map((al, index) => (
-            <AtSwipeAction
-              onClick={this.handleClickAction.bind(this, index)}
-              options={swipeActionOptions}
-            >
-              <AtListItem
-                className={al.showClassName ? "slideInLeft animated" : "opt0"}
-                title={al.title}
-                note={`修改日期：${al.sysdate}`}
-                extraText="查看相册"
-                arrow="right"
-                thumb={al.thumbs.length ? url + al.thumbs[0] : familyGIF}
-                key={index}
-                onClick={this.handleClickAlbum.bind(this, al)}
-              />
-            </AtSwipeAction>
-          ))}
+          {albums.map((al, index) => {
+            const sysdate = new Date(al.sysdate);
+            return (
+              <AtSwipeAction
+                onClick={this.handleClickAction.bind(this, index)}
+                options={swipeActionOptions}
+              >
+                <AtListItem
+                  className={al.showClassName ? "slideInLeft animated" : "opt0"}
+                  title={al.title}
+                  note={`创建时间：${sysdate.getFullYear()} 年 ${sysdate.getMonth() +
+                    1} 月`}
+                  extraText="查看相册"
+                  arrow="right"
+                  thumb={al.thumbs.length ? url + al.thumbs[0] : familyGIF}
+                  key={index}
+                  onClick={this.handleClickAlbum.bind(this, al)}
+                />
+              </AtSwipeAction>
+            );
+          })}
         </AtList>
         <View className="fab-box">
           <AtFab>
