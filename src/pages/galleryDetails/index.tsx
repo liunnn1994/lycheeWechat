@@ -319,7 +319,7 @@ export default class GalleryDetails extends Component<IProps, IState> {
         <AtMessage />
         <View id="search">
           <AtSearchBar
-            placeholder="后续添加搜索功能"
+            placeholder="搜索文件名与标签"
             actionName="搜索"
             value={this.state.value}
             onChange={this.onChangeSearch.bind(this)}
