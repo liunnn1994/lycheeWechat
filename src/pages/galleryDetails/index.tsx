@@ -314,7 +314,6 @@ export default class GalleryDetails extends Component<IProps, IState> {
       tabList,
       showDelSheet
     } = this.state;
-    console.log(showDelSheet);
     return (
       <View>
         <AtMessage />

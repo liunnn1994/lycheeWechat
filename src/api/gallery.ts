@@ -2,13 +2,14 @@
 import request from "../utils/request";
 import Taro from "@tarojs/taro";
 import qs from "qs";
+import { apiUrl, noticeUri } from "./urls";
 
 /**
  * @description 获取相册,带上cookie
  * */
 export const getAlbums = () => {
   return request.post(
-    "https://image.2077tech.com/php/index.php",
+    apiUrl,
     qs.stringify({
       function: "Albums::get"
     })
@@ -21,7 +22,7 @@ export const getAlbums = () => {
  * */
 export const getImagesByAlbumID = (albumID: string) => {
   return request.post(
-    "https://image.2077tech.com/php/index.php",
+    apiUrl,
     qs.stringify({
       function: "Album::get",
       albumID,
@@ -37,7 +38,7 @@ export const getImagesByAlbumID = (albumID: string) => {
  * */
 export const addAlbum = (title: string, parent_id: number = 0) => {
   return request.post(
-    "https://image.2077tech.com/php/index.php",
+    apiUrl,
     qs.stringify({
       function: "Album::add",
       title,
@@ -53,7 +54,7 @@ export const addAlbum = (title: string, parent_id: number = 0) => {
  * */
 export const addPhoto = (albumID: string, filePath: string) => {
   return Taro.uploadFile({
-    url: "https://image.2077tech.com/php/index.php", //仅为示例，非真实的接口地址
+    url: apiUrl, //仅为示例，非真实的接口地址
     filePath,
     name: "0",
     header: {
@@ -73,10 +74,45 @@ export const addPhoto = (albumID: string, filePath: string) => {
  * */
 export const delPhotos = (photoIDs: string) => {
   return request.post(
-    "https://image.2077tech.com/php/index.php",
+    apiUrl,
     qs.stringify({
       function: "Photo::delete",
       photoIDs
     })
   );
 };
+
+/**
+ * @description 重命名相册
+ * @param {String} albumIDs - 重命名相册ID的集合  ID1,ID2,ID3 ...
+ * @param {String} title - 重命名的名称
+ * */
+export const renameAlbums = (albumIDs: string, title: string) => {
+  return request.post(
+    apiUrl,
+    qs.stringify({
+      function: "Album::setTitle",
+      albumIDs,
+      title
+    })
+  );
+};
+
+/**
+ * @description 删除相册
+ * @param {String} albumIDs - 删除相册ID的集合
+ * */
+export const delAlbums = (albumIDs: string) => {
+  return request.post(
+    apiUrl,
+    qs.stringify({
+      function: "Album::delete",
+      albumIDs
+    })
+  );
+};
+
+/**
+ * @description 获取通知
+ * */
+export const getNotice = () => request.get(noticeUri);
