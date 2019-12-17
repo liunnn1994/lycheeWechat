@@ -11,6 +11,8 @@ import {
 import { logIn } from "../../api/user";
 import "./index.scss";
 
+const imageUrl = require("../../static/family.png");
+
 interface IProps {}
 interface IState {
   isLogin: boolean;
@@ -55,23 +57,6 @@ export default class Index extends Component<IProps, IState> {
       passwordErrorClass: "",
       timer: null
     };
-  }
-  componentWillMount() {}
-
-  componentDidMount() {
-    const user = Taro.getStorageSync("user");
-    const password = Taro.getStorageSync("password");
-    if (user && password) {
-      this.setState(
-        {
-          user,
-          password
-        },
-        () => {
-          this.handleLogin();
-        }
-      );
-    }
   }
   closeError() {
     this.setState({
@@ -167,6 +152,28 @@ export default class Index extends Component<IProps, IState> {
     let obj = {};
     obj[key] = false;
     this.setState(obj);
+  }
+  onShareAppMessage() {
+    return {
+      title: "欢迎光临刘家大宅院",
+      path: "/page/index/index",
+      imageUrl
+    };
+  }
+  componentDidMount() {
+    const user = Taro.getStorageSync("user");
+    const password = Taro.getStorageSync("password");
+    if (user && password) {
+      this.setState(
+        {
+          user,
+          password
+        },
+        () => {
+          this.handleLogin();
+        }
+      );
+    }
   }
   render() {
     const {

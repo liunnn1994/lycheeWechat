@@ -23,8 +23,9 @@ import {
   getNotice
 } from "../../api/gallery";
 import { familyGIF } from "../../static/base64Imgs";
+import { domain } from "../../api/urls";
 import "./index.scss";
-
+const imageUrl = require("../../static/family.png");
 interface IProps {}
 interface IState {
   fetchGalleryLoading: boolean;
@@ -86,7 +87,7 @@ export default class Gallery extends Component<IProps, IState> {
       albumsData: [],
       showReLogin: false,
       showCreateAlbum: false,
-      url: "https://image.2077tech.com/",
+      url: domain,
       timer: null,
       swipeActionOptions: [
         {
@@ -162,16 +163,6 @@ export default class Gallery extends Component<IProps, IState> {
     Taro.navigateTo({
       url: `/pages/galleryDetails/index?id=${al.id}&title=${al.title}`
     });
-  }
-  componentWillMount() {
-    this.setState({
-      showNoticeAgain: Taro.getStorageSync("showNoticeAgain")
-    });
-  }
-
-  componentDidMount() {
-    this.getNotice();
-    this.loadGallery();
   }
   getNotice() {
     getNotice().then(res => {
@@ -310,6 +301,22 @@ export default class Gallery extends Component<IProps, IState> {
     let obj = {};
     obj[key] = false;
     this.setState(obj);
+  }
+  onShareAppMessage() {
+    return {
+      title: "欢迎光临刘家大宅院",
+      path: "/page/index/index",
+      imageUrl
+    };
+  }
+  componentWillMount() {
+    this.setState({
+      showNoticeAgain: Taro.getStorageSync("showNoticeAgain")
+    });
+  }
+  componentDidMount() {
+    this.getNotice();
+    this.loadGallery();
   }
   render() {
     const {

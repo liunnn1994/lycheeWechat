@@ -1,7 +1,6 @@
 import Taro, { Component, Config } from "@tarojs/taro";
 import { ScrollView, View, Image, Button, Text } from "@tarojs/components";
 import {
-  AtSearchBar,
   AtMessage,
   AtModalHeader,
   AtModalContent,
@@ -14,6 +13,7 @@ import {
   AtActionSheetItem
 } from "taro-ui";
 import { getImagesByAlbumID, delPhotos } from "../../api/gallery";
+import { domain } from "../../api/urls";
 import { lazyLoad } from "../../utils/public";
 import "./index.scss";
 
@@ -31,7 +31,6 @@ interface IState {
   photos: any[];
   tabList: any[];
   allPhotosUrl: string[];
-  timer: any;
   url: string;
   scrollViewHeight: number;
   loadData: {
@@ -66,7 +65,7 @@ export default class GalleryDetails extends Component<IProps, IState> {
       title: "",
       status: "loading",
       value: "",
-      url: "https://image.2077tech.com/",
+      url: domain,
       photos: [],
       allPhotosUrl: [],
       tabList: [
@@ -84,7 +83,6 @@ export default class GalleryDetails extends Component<IProps, IState> {
           key: 1
         }
       ],
-      timer: null,
       loadData: {
         allArr: [],
         loadArr: [],
@@ -96,18 +94,11 @@ export default class GalleryDetails extends Component<IProps, IState> {
   }
   componentDidMount() {
     const { id, title } = this.$router.params;
-    const query = Taro.createSelectorQuery();
-    query.select("#search").boundingClientRect();
-    query.exec(res => {
-      //res就是 所有标签为mjltest的元素的信息 的数组
-      this.setState({
-        id,
-        title,
-        isClose: false,
-        scrollViewHeight:
-          Taro.getSystemInfoSync().windowHeight -
-          res.find(item => item.id === "search").height
-      });
+    this.setState({
+      id,
+      title,
+      isClose: false,
+      scrollViewHeight: Taro.getSystemInfoSync().windowHeight
     });
     this.getAllImages(id);
 
@@ -124,50 +115,48 @@ export default class GalleryDetails extends Component<IProps, IState> {
       message: "时光机加载中，请稍后！",
       type: "info"
     });
-    const { timer, url } = this.state;
-    clearInterval(timer);
-    getImagesByAlbumID(id)
-      .then(res => {
-        if (res.data.photos === undefined) {
-          this.setState({
-            showReLogin: true
-          });
-          return false;
-        }
-        let photos = [];
-        if (res.data.photos !== false) {
-          photos = res.data.photos.map(photo => ({
-            thumbUrl: photo.thumbUrl,
-            id: photo.id,
-            url: photo.url,
-            selected: false
-          }));
-        }
-        let obj = {
-          ...this.state.loadData,
-          allArr: photos
-        };
-        if (refresh) {
-          obj.loadArr = [];
-        }
-        const loadData = lazyLoad(obj);
-        this.setState(
-          {
-            loadData,
-            photos: loadData.loadArr,
-            allPhotosUrl: photos.map(photo => `${url}${photo["url"]}`)
-          },
-          () => {
-            this.handleLoadMore();
-          }
-        );
-        Taro.stopPullDownRefresh();
-
-        Taro.atMessage({
-          message: "欢迎来到刘家大院！",
-          type: "success"
+    const { url } = this.state;
+    getImagesByAlbumID(id).then(res => {
+      if (res.data.photos === undefined) {
+        this.setState({
+          showReLogin: true
         });
-      })
+        return false;
+      }
+      let photos = [];
+      if (res.data.photos !== false) {
+        photos = res.data.photos.map(photo => ({
+          thumbUrl: photo.thumbUrl,
+          id: photo.id,
+          url: photo.url,
+          selected: false
+        }));
+      }
+      let obj = {
+        ...this.state.loadData,
+        allArr: photos
+      };
+      if (refresh) {
+        obj.loadArr = [];
+      }
+      const loadData = lazyLoad(obj);
+      this.setState(
+        {
+          loadData,
+          photos: loadData.loadArr,
+          allPhotosUrl: photos.map(photo => `${url}${photo["url"]}`)
+        },
+        () => {
+          this.handleLoadMore();
+        }
+      );
+      Taro.stopPullDownRefresh();
+
+      Taro.atMessage({
+        message: "欢迎来到刘家大院！",
+        type: "success"
+      });
+    });
   }
   componentDidShow(): void {
     const { isPre, isClose, id } = this.state;
@@ -210,12 +199,6 @@ export default class GalleryDetails extends Component<IProps, IState> {
       });
     }
   }
-  onChangeSearch(value: string) {
-    this.setState({
-      value
-    });
-  }
-  onActionClick() {}
   handleLoadMore() {
     const { loadData } = this.state;
     if (loadData.finished) {
@@ -311,15 +294,6 @@ export default class GalleryDetails extends Component<IProps, IState> {
     return (
       <View>
         <AtMessage />
-        <View id="search">
-          <AtSearchBar
-            placeholder="搜索文件名与标签"
-            actionName="搜索"
-            value={this.state.value}
-            onChange={this.onChangeSearch.bind(this)}
-            onActionClick={this.onActionClick.bind(this)}
-          />
-        </View>
         <ScrollView
           scrollY={true}
           lowerThreshold={100}
