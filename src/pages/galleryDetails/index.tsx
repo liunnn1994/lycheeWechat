@@ -1,5 +1,5 @@
-import Taro, { Component, Config } from "@tarojs/taro";
-import { ScrollView, View, Image, Button, Text } from "@tarojs/components";
+import Taro, {Component, Config} from "@tarojs/taro";
+import {ScrollView, View, Image, Button, Text} from "@tarojs/components";
 import {
   AtMessage,
   AtModalHeader,
@@ -12,12 +12,14 @@ import {
   AtActionSheet,
   AtActionSheetItem
 } from "taro-ui";
-import { getImagesByAlbumID, delPhotos } from "../../api/gallery";
-import { domain } from "../../api/urls";
-import { lazyLoad } from "../../utils/public";
+import {getImagesByAlbumID, delPhotos} from "../../api/gallery";
+import {domain} from "../../api/urls";
+import {lazyLoad} from "../../utils/public";
 import "./index.scss";
 
-interface IProps {}
+interface IProps {
+}
+
 interface IState {
   id: string;
   showReLogin: boolean;
@@ -52,6 +54,7 @@ export default class GalleryDetails extends Component<IProps, IState> {
   static options = {
     addGlobalClass: true
   };
+
   constructor(props: IProps) {
     super(props);
     this.state = {
@@ -92,8 +95,9 @@ export default class GalleryDetails extends Component<IProps, IState> {
       }
     };
   }
+
   componentDidMount() {
-    const { id, title } = this.$router.params;
+    const {id, title} = this.$router.params;
     this.setState({
       id,
       title,
@@ -106,16 +110,41 @@ export default class GalleryDetails extends Component<IProps, IState> {
       title
     });
   }
+
   onPullDownRefresh() {
     // 下拉开始
     this.getAllImages(this.state.id, true);
   }
-  getAllImages(id: string, refresh: boolean = false) {
+
+  resetDate() {
+    return new Promise(res => {
+      this.setState({
+        loadData: {
+          allArr: [],
+          loadArr: [],
+          index: 0,
+          long: 50,
+          finished: false
+        }
+      }, () => {
+        res(true)
+      })
+    })
+  }
+
+  async getAllImages(id: string, refresh: boolean = false) {
+    if (refresh) {
+      await this.resetDate();
+      Taro.pageScrollTo({
+        selector: "#galleryDetails",
+        scrollTop: 0
+      })
+    }
     Taro.atMessage({
       message: "时光机加载中，请稍后！",
       type: "info"
     });
-    const { url } = this.state;
+    const {url} = this.state;
     getImagesByAlbumID(id).then(res => {
       if (res.data.photos === undefined) {
         this.setState({
@@ -136,9 +165,6 @@ export default class GalleryDetails extends Component<IProps, IState> {
         ...this.state.loadData,
         allArr: photos
       };
-      if (refresh) {
-        obj.loadArr = [];
-      }
       const loadData = lazyLoad(obj);
       this.setState(
         {
@@ -158,8 +184,9 @@ export default class GalleryDetails extends Component<IProps, IState> {
       });
     });
   }
+
   componentDidShow(): void {
-    const { isPre, isClose, id } = this.state;
+    const {isPre, isClose, id} = this.state;
     if (!isClose && !isPre) {
       this.getAllImages(id, true);
     }
@@ -175,8 +202,9 @@ export default class GalleryDetails extends Component<IProps, IState> {
       url: "/pages/index/index"
     });
   }
+
   handleClickImage(photo) {
-    const { url, showBottomTabBar } = this.state;
+    const {url, showBottomTabBar} = this.state;
     if (showBottomTabBar) {
       let photos = [...this.state.photos];
       let clickPhoto = photos.find(pt => pt.id === photo.id);
@@ -199,8 +227,9 @@ export default class GalleryDetails extends Component<IProps, IState> {
       });
     }
   }
+
   handleLoadMore() {
-    const { loadData } = this.state;
+    const {loadData} = this.state;
     if (loadData.finished) {
       this.setState({
         status: "noMore"
@@ -211,17 +240,19 @@ export default class GalleryDetails extends Component<IProps, IState> {
       });
     }
   }
+
   handleAddAlbum() {
-    const { id, title } = this.state;
+    const {id, title} = this.state;
     Taro.navigateTo({
       url: `/pages/addPhotos/index?id=${id}&title=${title}`
     });
   }
+
   handleClickTabBar(index: number) {
-    const { tabList } = this.state;
+    const {tabList} = this.state;
     switch (tabList[index].actionType) {
       case "cancel":
-        let { photos } = this.state;
+        let {photos} = this.state;
         photos.forEach(photo => {
           photo.selected = false;
         });
@@ -239,6 +270,7 @@ export default class GalleryDetails extends Component<IProps, IState> {
         break;
     }
   }
+
   handleSelect(index: number) {
     let photos = [...this.state.photos];
     photos[index].selected = !photos[index].selected;
@@ -251,6 +283,7 @@ export default class GalleryDetails extends Component<IProps, IState> {
       tabList
     });
   }
+
   delAllSelectPhotos() {
     delPhotos(
       String(
@@ -275,11 +308,13 @@ export default class GalleryDetails extends Component<IProps, IState> {
       showBottomTabBar: false
     });
   }
+
   handleCloseSheet() {
     this.setState({
       showDelSheet: false
     });
   }
+
   render() {
     const {
       photos,
@@ -293,8 +328,9 @@ export default class GalleryDetails extends Component<IProps, IState> {
     } = this.state;
     return (
       <View>
-        <AtMessage />
+        <AtMessage/>
         <ScrollView
+          id="galleryDetails"
           scrollY={true}
           lowerThreshold={100}
           scrollWithAnimation={true}
@@ -323,7 +359,7 @@ export default class GalleryDetails extends Component<IProps, IState> {
               );
             })}
           </View>
-          <AtLoadMore status={status} />
+          <AtLoadMore status={status}/>
         </ScrollView>
         <AtModal isOpened={showReLogin}>
           <AtModalHeader>提示</AtModalHeader>
