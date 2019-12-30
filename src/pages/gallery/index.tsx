@@ -1,6 +1,6 @@
 // eslint-disable-next-line no-unused-vars
-import Taro, { Component, Config } from "@tarojs/taro";
-import { Text, View, Button } from "@tarojs/components";
+import Taro, {Component, Config} from "@tarojs/taro";
+import {Text, View, Button} from "@tarojs/components";
 import {
   AtToast,
   AtList,
@@ -20,19 +20,26 @@ import {
   addAlbum,
   delAlbums,
   renameAlbums,
-  getNotice
+  getNotice,
+  getAuthCode
 } from "../../api/gallery";
-import { familyGIF } from "../../static/base64Imgs";
-import { domain } from "../../api/urls";
+import {familyGIF} from "../../static/base64Imgs";
+import {domain} from "../../api/urls";
 import "./index.scss";
+
 const imageUrl = require("../../static/family.png");
-interface IProps {}
+
+interface IProps {
+}
+
 interface IState {
   fetchGalleryLoading: boolean;
   showReLogin: boolean;
   showNotice: boolean;
   showNoticeAgain: boolean;
   showCreateAlbum: boolean;
+  showAuth: boolean;
+  authCode: string;
   confirmDelAlbum: boolean;
   renameAlbum: boolean;
   value: string;
@@ -71,6 +78,7 @@ export default class Gallery extends Component<IProps, IState> {
   static options = {
     addGlobalClass: true
   };
+
   constructor(props: IProps) {
     super(props);
     this.state = {
@@ -78,6 +86,8 @@ export default class Gallery extends Component<IProps, IState> {
       confirmDelAlbum: false,
       renameAlbum: false,
       showNoticeAgain: false,
+      showAuth: false,
+      authCode: "",
       actionIndex: -1,
       value: "",
       notice: "",
@@ -107,18 +117,21 @@ export default class Gallery extends Component<IProps, IState> {
       ]
     };
   }
+
   handleAddAlbum() {
     this.setState({
-      showCreateAlbum: true
+      showAuth: true
     });
   }
+
   onPullDownRefresh() {
     // 下拉开始
     this.loadGallery();
   }
+
   loadGallery() {
     this.message("时光机加载中，请稍后！");
-    const { timer } = this.state;
+    const {timer} = this.state;
     clearInterval(timer);
     getAlbums().then(res => {
       if (res.data.albums === undefined) {
@@ -159,14 +172,16 @@ export default class Gallery extends Component<IProps, IState> {
       });
     });
   }
+
   handleClickAlbum(al: { id: string; title: string }) {
     Taro.navigateTo({
       url: `/pages/galleryDetails/index?id=${al.id}&title=${al.title}`
     });
   }
+
   getNotice() {
     getNotice().then(res => {
-      const { data } = res;
+      const {data} = res;
       if (
         !this.state.showNoticeAgain ||
         Taro.getStorageSync("notice") !== data
@@ -180,6 +195,7 @@ export default class Gallery extends Component<IProps, IState> {
       Taro.setStorageSync("notice", data);
     });
   }
+
   message(
     message: string,
     type: "info" | "success" | "error" | "warning" | undefined = "info"
@@ -189,9 +205,10 @@ export default class Gallery extends Component<IProps, IState> {
       type
     });
   }
+
   handleCreateAlbum(bool: boolean) {
     if (bool) {
-      const { newAlbumName } = this.state;
+      const {newAlbumName} = this.state;
       if (newAlbumName === "") {
         this.message("相册名不能为空！", "error");
       } else {
@@ -206,6 +223,7 @@ export default class Gallery extends Component<IProps, IState> {
       showCreateAlbum: false
     });
   }
+
   handleChangeAlbumName(newAlbumName) {
     this.setState({
       newAlbumName
@@ -213,6 +231,15 @@ export default class Gallery extends Component<IProps, IState> {
     // 在小程序中，如果想改变 value 的值，需要 `return value` 从而改变输入框的当前值
     return newAlbumName;
   }
+
+  handleChangeAuthCode(authCode) {
+    this.setState({
+      authCode
+    });
+    // 在小程序中，如果想改变 value 的值，需要 `return value` 从而改变输入框的当前值
+    return authCode;
+  }
+
   onChangeSearch(value: string) {
     const albumsData = JSON.parse(JSON.stringify(this.state.albumsData));
     let albums: any[] = [];
@@ -226,19 +253,22 @@ export default class Gallery extends Component<IProps, IState> {
       albums
     });
   }
+
   onActionClick() {
-    const { value } = this.state;
-    const { albumsData } = this.state;
+    const {value} = this.state;
+    const {albumsData} = this.state;
     let albums = albumsData.filter(al => new RegExp(value).test(al.title));
     this.setState({
       albums
     });
   }
+
   handleReLogin() {
     Taro.reLaunch({
       url: "/pages/index/index"
     });
   }
+
   handleClickAction(actionIndex, e) {
     this.setState({
       actionIndex
@@ -254,9 +284,10 @@ export default class Gallery extends Component<IProps, IState> {
       });
     }
   }
+
   renameAlbum(val) {
     if (val) {
-      const { actionIndex, albumsData, newAlbumName } = this.state;
+      const {actionIndex, albumsData, newAlbumName} = this.state;
       renameAlbums(albumsData[actionIndex].id, newAlbumName).then(res => {
         if (res.data === true) {
           this.message("重命名成功！", "success");
@@ -270,9 +301,10 @@ export default class Gallery extends Component<IProps, IState> {
       renameAlbum: false
     });
   }
+
   delAlbum(val) {
     if (val) {
-      const { actionIndex, albumsData } = this.state;
+      const {actionIndex, albumsData} = this.state;
       delAlbums(albumsData[actionIndex].id).then(res => {
         if (res.data === true) {
           this.message("删除成功！", "success");
@@ -286,6 +318,7 @@ export default class Gallery extends Component<IProps, IState> {
       confirmDelAlbum: false
     });
   }
+
   closeNotice(val) {
     if (val) {
       this.setState({
@@ -297,11 +330,52 @@ export default class Gallery extends Component<IProps, IState> {
     });
     Taro.setStorageSync("showNoticeAgain", val);
   }
+
+  handleAuth(bool) {
+    if (bool) {
+      this.auth().then(res => {
+        if (res) {
+          this.setState({
+            authCode: "",
+            showAuth: false,
+            showCreateAlbum: true
+          });
+        } else {
+          Taro.showToast({
+            title: '授权码错误！',
+            icon: 'none',
+            mask: true
+          })
+        }
+      })
+    } else {
+      this.setState({
+        authCode: "",
+        showAuth: bool
+      });
+    }
+  }
+
+  auth() {
+    const {authCode} = this.state;
+    return new Promise(resolve => {
+      getAuthCode().then(res => {
+        const data = res.data.toString();
+        if (authCode === data) {
+          resolve(true);
+        } else {
+          resolve(false);
+        }
+      })
+    })
+  }
+
   handleCloseToast(key) {
     let obj = {};
     obj[key] = false;
     this.setState(obj);
   }
+
   onShareAppMessage() {
     return {
       title: "欢迎光临刘家大宅院",
@@ -309,15 +383,18 @@ export default class Gallery extends Component<IProps, IState> {
       imageUrl
     };
   }
+
   componentWillMount() {
     this.setState({
       showNoticeAgain: Taro.getStorageSync("showNoticeAgain")
     });
   }
+
   componentDidMount() {
     this.getNotice();
     this.loadGallery();
   }
+
   render() {
     const {
       fetchGalleryLoading,
@@ -330,11 +407,13 @@ export default class Gallery extends Component<IProps, IState> {
       confirmDelAlbum,
       renameAlbum,
       showNotice,
-      notice
+      notice,
+      showAuth,
+      authCode
     } = this.state;
     return (
       <View>
-        <AtMessage />
+        <AtMessage/>
         <AtSearchBar
           placeholder="搜索相册名称"
           actionName="搜索"
@@ -354,7 +433,7 @@ export default class Gallery extends Component<IProps, IState> {
                   className={al.showClassName ? "slideInLeft animated" : "opt0"}
                   title={al.title}
                   note={`创建时间：${sysdate.getFullYear()} 年 ${sysdate.getMonth() +
-                    1} 月`}
+                  1} 月`}
                   extraText="查看相册"
                   arrow="right"
                   thumb={al.thumbs.length ? url + al.thumbs[0] : familyGIF}
@@ -373,14 +452,6 @@ export default class Gallery extends Component<IProps, IState> {
             />
           </AtFab>
         </View>
-        <AtToast
-          duration={0}
-          hasMask
-          isOpened={fetchGalleryLoading}
-          text="相册加载中"
-          status="loading"
-          onClose={this.handleCloseToast.bind(this, "fetchGalleryLoading")}
-        />
         <AtModal isOpened={showReLogin}>
           <AtModalHeader>提示</AtModalHeader>
           <AtModalContent>登录失效，请重新登录！</AtModalContent>
@@ -450,6 +521,33 @@ export default class Gallery extends Component<IProps, IState> {
             <Button onClick={this.closeNotice.bind(this, false)}>关闭</Button>
           </AtModalAction>
         </AtModal>
+        <AtModal isOpened={showAuth}>
+          <AtModalHeader>新建相册需要输入授权码</AtModalHeader>
+          <AtModalContent>
+            <AtInput
+              name="value"
+              title="授权码"
+              type="text"
+              placeholder="请输入授权码"
+              value={authCode}
+              onChange={this.handleChangeAuthCode.bind(this)}
+            />
+          </AtModalContent>
+          <AtModalAction>
+            <Button onClick={this.handleAuth.bind(this, false)}>
+              取消
+            </Button>
+            <Button onClick={this.handleAuth.bind(this, true)}>确定</Button>
+          </AtModalAction>
+        </AtModal>
+        <AtToast
+          duration={0}
+          hasMask
+          isOpened={fetchGalleryLoading}
+          text="相册加载中"
+          status="loading"
+          onClose={this.handleCloseToast.bind(this, "fetchGalleryLoading")}
+        />
       </View>
     );
   }

@@ -2,7 +2,7 @@
 import request from "../utils/request";
 import Taro from "@tarojs/taro";
 import qs from "qs";
-import { apiUrl, noticeUri } from "./urls";
+import {apiUrl, noticeUri, authUri} from "./urls";
 
 /**
  * @description 获取相册,带上cookie
@@ -116,3 +116,7 @@ export const delAlbums = (albumIDs: string) => {
  * @description 获取通知
  * */
 export const getNotice = () => request.get(noticeUri);
+/**
+ * @description 获取验证码
+ * */
+export const getAuthCode = () => request.get(authUri);

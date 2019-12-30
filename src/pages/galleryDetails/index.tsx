@@ -10,9 +10,9 @@ import {
   AtFab,
   AtTabBar,
   AtActionSheet,
-  AtActionSheetItem
+  AtActionSheetItem, AtInput
 } from "taro-ui";
-import {getImagesByAlbumID, delPhotos} from "../../api/gallery";
+import {getImagesByAlbumID, delPhotos, getAuthCode} from "../../api/gallery";
 import {domain} from "../../api/urls";
 import {lazyLoad} from "../../utils/public";
 import "./index.scss";
@@ -25,9 +25,11 @@ interface IState {
   showReLogin: boolean;
   isClose: boolean;
   isPre: boolean;
+  showAuth: boolean;
   showBottomTabBar: boolean;
   showDelSheet: boolean;
   title: string;
+  authCode: string;
   status: "loading" | "noMore" | "more" | undefined;
   value: string;
   photos: any[];
@@ -62,10 +64,12 @@ export default class GalleryDetails extends Component<IProps, IState> {
       showReLogin: false,
       showBottomTabBar: false,
       showDelSheet: false,
+      showAuth: false,
       isClose: true,
       isPre: false,
       scrollViewHeight: 0,
       title: "",
+      authCode: "",
       status: "loading",
       value: "",
       url: domain,
@@ -242,9 +246,8 @@ export default class GalleryDetails extends Component<IProps, IState> {
   }
 
   handleAddAlbum() {
-    const {id, title} = this.state;
-    Taro.navigateTo({
-      url: `/pages/addPhotos/index?id=${id}&title=${title}`
+    this.setState({
+      showAuth: true
     });
   }
 
@@ -315,6 +318,56 @@ export default class GalleryDetails extends Component<IProps, IState> {
     });
   }
 
+  handleChangeAuthCode(authCode) {
+    this.setState({
+      authCode
+    });
+    // 在小程序中，如果想改变 value 的值，需要 `return value` 从而改变输入框的当前值
+    return authCode;
+  }
+
+  handleAuth(bool) {
+    if (bool) {
+      this.auth().then(res => {
+        if (res) {
+          this.setState({
+            authCode: "",
+            showAuth: false
+          });
+          const {id, title} = this.state;
+          Taro.navigateTo({
+            url: `/pages/addPhotos/index?id=${id}&title=${title}`
+          });
+        } else {
+          Taro.showToast({
+            title: '授权码错误！',
+            icon: 'none',
+            mask: true
+          })
+        }
+      })
+    } else {
+      this.setState({
+        authCode: "",
+        showAuth: bool
+      });
+    }
+  }
+
+  auth() {
+    const {authCode} = this.state;
+    return new Promise(resolve => {
+      getAuthCode().then(res => {
+        const data = res.data.toString();
+        if (authCode === data) {
+          resolve(true);
+        } else {
+          resolve(false);
+        }
+      })
+    })
+  }
+
   render() {
     const {
       photos,
@@ -324,7 +377,9 @@ export default class GalleryDetails extends Component<IProps, IState> {
       scrollViewHeight,
       showBottomTabBar,
       tabList,
-      showDelSheet
+      showDelSheet,
+      showAuth,
+      authCode
     } = this.state;
     return (
       <View>
@@ -366,6 +421,26 @@ export default class GalleryDetails extends Component<IProps, IState> {
           <AtModalContent>登录失效，请重新登录！</AtModalContent>
           <AtModalAction>
             <Button onClick={this.handleReLogin}>确定</Button>
+          </AtModalAction>
+        </AtModal>
+
+        <AtModal isOpened={showAuth}>
+          <AtModalHeader>上传图片需要输入授权码</AtModalHeader>
+          <AtModalContent>
+            <AtInput
+              name="value"
+              title="授权码"
+              type="text"
+              placeholder="请输入授权码"
+              value={authCode}
+              onChange={this.handleChangeAuthCode.bind(this)}
+            />
+          </AtModalContent>
+          <AtModalAction>
+            <Button onClick={this.handleAuth.bind(this, false)}>
+              取消
+            </Button>
+            <Button onClick={this.handleAuth.bind(this, true)}>确定</Button>
           </AtModalAction>
         </AtModal>
         <View className="fab-box">
