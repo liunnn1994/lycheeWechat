@@ -1,56 +1,36 @@
-import Taro, {Component, Config} from "@tarojs/taro";
-import {ScrollView, View, Image, Button, Text} from "@tarojs/components";
+import Taro, { Component, Config } from "@tarojs/taro";
+import { ScrollView, View, Image, Button } from "@tarojs/components";
 import {
-  AtMessage,
+  AtLoadMore,
+  AtModal,
   AtModalHeader,
   AtModalContent,
   AtModalAction,
-  AtModal,
-  AtLoadMore,
-  AtFab,
-  AtTabBar,
-  AtActionSheet,
-  AtActionSheetItem, AtInput
+  AtInput
 } from "taro-ui";
-import {getImagesByAlbumID, delPhotos, getAuthCode} from "../../api/gallery";
-import {domain} from "../../api/urls";
-import {lazyLoad} from "../../utils/public";
+import { getImagesByAlbumID, getPublic } from "../../api/gallery";
+import { domain } from "../../api/urls";
 import "./index.scss";
+import { message } from "../../utils/public";
 
-interface IProps {
-}
+interface IProps {}
 
 interface IState {
   id: string;
-  showReLogin: boolean;
-  isClose: boolean;
-  isPre: boolean;
-  showAuth: boolean;
-  showBottomTabBar: boolean;
-  showDelSheet: boolean;
   title: string;
-  authCode: string;
-  status: "loading" | "noMore" | "more" | undefined;
-  value: string;
-  photos: any[];
-  tabList: any[];
-  allPhotosUrl: string[];
-  url: string;
+  password: string;
+  status: "noMore" | "more" | "loading" | undefined;
   scrollViewHeight: number;
-  loadData: {
-    allArr: any[];
-    loadArr: any[];
-    index: number;
-    long: number;
-    finished: boolean;
-  };
+  loadIndex: number;
+  lock: boolean;
+  allPhotos: any[];
+  photos: any[];
 }
 
 export default class GalleryDetails extends Component<IProps, IState> {
   config: Config = {
     navigationBarTitleText: "相册",
     backgroundTextStyle: "dark",
-    enablePullDownRefresh: true,
     onReachBottomDistance: 150
   };
   static options = {
@@ -61,413 +41,168 @@ export default class GalleryDetails extends Component<IProps, IState> {
     super(props);
     this.state = {
       id: "",
-      showReLogin: false,
-      showBottomTabBar: false,
-      showDelSheet: false,
-      showAuth: false,
-      isClose: true,
-      isPre: false,
-      scrollViewHeight: 0,
       title: "",
-      authCode: "",
+      password: "",
       status: "loading",
-      value: "",
-      url: domain,
-      photos: [],
-      allPhotosUrl: [],
-      tabList: [
-        {
-          title: "取消选择",
-          iconType: "close",
-          actionType: "cancel",
-          key: 0
-        },
-        {
-          title: "删除",
-          iconType: "trash",
-          actionType: "del",
-          text: "0",
-          key: 1
-        }
-      ],
-      loadData: {
-        allArr: [],
-        loadArr: [],
-        index: 0,
-        long: 50,
-        finished: false
-      }
+      scrollViewHeight: 0,
+      loadIndex: 0,
+      lock: false,
+      allPhotos: [],
+      photos: []
     };
   }
 
   componentDidMount() {
-    const {id, title} = this.$router.params;
-    this.setState({
-      id,
-      title,
-      isClose: false,
-      scrollViewHeight: Taro.getSystemInfoSync().windowHeight
-    });
-    this.getAllImages(id);
-
+    const { id, title, lock } = this.$router.params;
     Taro.setNavigationBarTitle({
       title
     });
-  }
-
-  onPullDownRefresh() {
-    // 下拉开始
-    this.getAllImages(this.state.id, true);
-  }
-
-  resetDate() {
-    return new Promise(res => {
-      this.setState({
-        loadData: {
-          allArr: [],
-          loadArr: [],
-          index: 0,
-          long: 50,
-          finished: false
+    this.setState(
+      {
+        id,
+        title,
+        scrollViewHeight: Taro.getSystemInfoSync().windowHeight,
+        lock: lock === "true"
+      },
+      () => {
+        if (lock !== "true") {
+          this.getAllImages(id);
         }
-      }, () => {
-        res(true)
-      })
-    })
+      }
+    );
   }
 
-  async getAllImages(id: string, refresh: boolean = false) {
-    if (refresh) {
-      await this.resetDate();
-      Taro.pageScrollTo({
-        selector: "#galleryDetails",
-        scrollTop: 0
-      })
-    }
-    Taro.atMessage({
-      message: "时光机加载中，请稍后！",
-      type: "info"
-    });
-    const {url} = this.state;
-    getImagesByAlbumID(id).then(res => {
-      if (res.data.photos === undefined) {
-        this.setState({
-          showReLogin: true
-        });
-        return false;
+  async getAllImages(id: string, password = "") {
+    getImagesByAlbumID(id, password).then(res => {
+      let allPhotos = res.data.photos;
+      if (!Array.isArray(allPhotos)) {
+        allPhotos = [];
       }
-      let photos = [];
-      if (res.data.photos !== false) {
-        photos = res.data.photos.map(photo => ({
-          thumbUrl: photo.thumbUrl,
-          id: photo.id,
-          url: photo.url,
-          selected: false
-        }));
-      }
-      let obj = {
-        ...this.state.loadData,
-        allArr: photos
-      };
-      const loadData = lazyLoad(obj);
       this.setState(
         {
-          loadData,
-          photos: loadData.loadArr,
-          allPhotosUrl: photos.map(photo => `${url}${photo["url"]}`)
+          allPhotos: allPhotos.map(photo => ({
+            id: photo.id,
+            title: photo.title,
+            thumbUrl: `${domain}${photo.thumbUrl}`,
+            url: `${domain}${photo.url}`
+          }))
         },
         () => {
-          this.handleLoadMore();
+          this.loadPhotos().then(() => {
+            if (allPhotos.length <= 50) {
+              this.setState({
+                loadIndex: this.state.allPhotos.length,
+                status: "noMore"
+              });
+            }
+          });
         }
       );
-      Taro.stopPullDownRefresh();
-
-      Taro.atMessage({
-        message: "欢迎来到刘家大院！",
-        type: "success"
-      });
     });
   }
-
-  componentDidShow(): void {
-    const {isPre, isClose, id} = this.state;
-    if (!isClose && !isPre) {
-      this.getAllImages(id, true);
-    }
-    if (isPre) {
-      this.setState({
-        isPre: false
-      });
-    }
-  }
-
-  handleReLogin() {
-    Taro.reLaunch({
-      url: "/pages/index/index"
-    });
-  }
-
-  handleClickImage(photo) {
-    const {url, showBottomTabBar} = this.state;
-    if (showBottomTabBar) {
-      let photos = [...this.state.photos];
-      let clickPhoto = photos.find(pt => pt.id === photo.id);
-      clickPhoto.selected = !clickPhoto.selected;
-      let selectedPhotos = photos.filter(photo => photo.selected);
-      let tabList = [...this.state.tabList];
-      tabList.find(tab => tab.actionType === "del").text =
-        selectedPhotos.length;
-      this.setState({
-        tabList,
-        photos
-      });
-    } else {
-      this.setState({
-        isPre: true
-      });
-      Taro.previewImage({
-        current: `${url}${photo.url}`, // 当前显示图片的http链接
-        urls: this.state.allPhotosUrl // 需要预览的图片http链接列表
-      });
-    }
-  }
-
-  handleLoadMore() {
-    const {loadData} = this.state;
-    if (loadData.finished) {
-      this.setState({
-        status: "noMore"
-      });
-    } else {
-      this.setState({
-        photos: lazyLoad(loadData).loadArr
-      });
-    }
-  }
-
-  handleAddAlbum() {
-    this.setState({
-      showAuth: true
-    });
-  }
-
-  handleClickTabBar(index: number) {
-    const {tabList} = this.state;
-    switch (tabList[index].actionType) {
-      case "cancel":
-        let {photos} = this.state;
-        photos.forEach(photo => {
-          photo.selected = false;
-        });
+  loadPhotos(index = 0) {
+    return new Promise(resolve => {
+      const { allPhotos, photos } = this.state;
+      let loadIndex = index + 50;
+      console.log(index);
+      if (index > allPhotos.length) {
+        resolve("finished");
+        return;
+      }
+      if (index >= allPhotos.length - 50) {
         this.setState({
-          photos
-        });
-        this.setState({
-          showBottomTabBar: false
-        });
-        break;
-      case "del":
-        this.setState({
-          showDelSheet: true
-        });
-        break;
-    }
-  }
-
-  handleSelect(index: number) {
-    let photos = [...this.state.photos];
-    photos[index].selected = !photos[index].selected;
-    let selectedPhotos = photos.filter(photo => photo.selected);
-    let tabList = [...this.state.tabList];
-    tabList.find(tab => tab.actionType === "del").text = selectedPhotos.length;
-    this.setState({
-      photos,
-      showBottomTabBar: true,
-      tabList
-    });
-  }
-
-  delAllSelectPhotos() {
-    delPhotos(
-      String(
-        this.state.photos.filter(photo => photo.selected).map(photo => photo.id)
-      )
-    ).then(res => {
-      if (res.data) {
-        Taro.atMessage({
-          message: "删除成功！",
-          type: "success"
-        });
-      } else {
-        Taro.atMessage({
-          message: "删除失败！",
-          type: "error"
+          loadIndex: this.state.allPhotos.length,
+          status: "noMore"
         });
       }
-      this.getAllImages(this.state.id, true);
-    });
-    this.setState({
-      showDelSheet: false,
-      showBottomTabBar: false
-    });
-  }
-
-  handleCloseSheet() {
-    this.setState({
-      showDelSheet: false
-    });
-  }
-
-  handleChangeAuthCode(authCode) {
-    this.setState({
-      authCode
-    });
-    // 在小程序中，如果想改变 value 的值，需要 `return value` 从而改变输入框的当前值
-    return authCode;
-  }
-
-  handleAuth(bool) {
-    if (bool) {
-      this.auth().then(res => {
-        if (res) {
-          this.setState({
-            authCode: "",
-            showAuth: false
-          });
-          const {id, title} = this.state;
-          Taro.navigateTo({
-            url: `/pages/addPhotos/index?id=${id}&title=${title}`
-          });
-        } else {
-          Taro.showToast({
-            title: '授权码错误！',
-            icon: 'none',
-            mask: true
-          })
+      let newPhotos = [...photos, ...[...allPhotos].slice(index, loadIndex)];
+      this.setState(
+        {
+          photos: newPhotos,
+          loadIndex
+        },
+        () => {
+          resolve(loadIndex);
         }
-      })
-    } else {
-      this.setState({
-        authCode: "",
-        showAuth: bool
-      });
-    }
+      );
+    });
   }
-
-  auth() {
-    const {authCode} = this.state;
-    return new Promise(resolve => {
-      getAuthCode().then(res => {
-        const data = res.data.toString();
-        if (authCode === data) {
-          resolve(true);
-        } else {
-          resolve(false);
-        }
-      })
-    })
+  handleClickImage(current) {
+    Taro.previewImage({
+      current,
+      urls: this.state.allPhotos.map(photo => photo.url)
+    });
   }
-
+  async handleLoadMore() {
+    await this.loadPhotos(this.state.loadIndex);
+  }
+  handleChangePassword(password) {
+    this.setState({
+      password
+    });
+    return password;
+  }
+  handleConfirm() {
+    const { id, password } = this.state;
+    message("登陆中", "loading", 60000);
+    getPublic(id, password).then(res => {
+      console.log(res);
+      if (res.data) {
+        this.getAllImages(id, password);
+        message("登陆成功", "success");
+        this.setState({
+          lock: false
+        });
+      } else {
+        message("密码错误！", "none");
+      }
+    });
+  }
   render() {
-    const {
-      photos,
-      url,
-      showReLogin,
-      status,
-      scrollViewHeight,
-      showBottomTabBar,
-      tabList,
-      showDelSheet,
-      showAuth,
-      authCode
-    } = this.state;
+    const { status, scrollViewHeight, photos, lock } = this.state;
     return (
       <View>
-        <AtMessage/>
         <ScrollView
-          id="galleryDetails"
           scrollY={true}
           lowerThreshold={100}
           scrollWithAnimation={true}
           onScrollToLower={this.handleLoadMore.bind(this)}
           style={`height:${scrollViewHeight}px`}
+          enableBackToTop={true}
         >
           <View className="at-row at-row--wrap">
-            {photos.map((photo, index) => {
-              const className = `at-col galleryItems zoomInDown animated ${
-                photo.selected ? "selected" : ""
-              }`;
-              return (
-                <View
-                  className={className}
-                  key={index}
-                  onClick={this.handleClickImage.bind(this, photo)}
-                  onLongPress={this.handleSelect.bind(this, index)}
-                >
-                  <Image
-                    mode="aspectFill"
-                    style="width:100%;height:100%;"
-                    src={`${url}${photo.thumbUrl}`}
-                    lazyLoad
-                  />
-                </View>
-              );
-            })}
+            {photos.map(photo => (
+              <View
+                onClick={this.handleClickImage.bind(this, photo.url)}
+                className={`galleryItems`}
+              >
+                <Image
+                  mode="aspectFill"
+                  style="width:100%;height:100%;"
+                  src={photo.thumbUrl}
+                  lazyLoad
+                />
+              </View>
+            ))}
           </View>
-          <AtLoadMore status={status}/>
+          <AtLoadMore status={status} />
         </ScrollView>
-        <AtModal isOpened={showReLogin}>
-          <AtModalHeader>提示</AtModalHeader>
-          <AtModalContent>登录失效，请重新登录！</AtModalContent>
-          <AtModalAction>
-            <Button onClick={this.handleReLogin}>确定</Button>
-          </AtModalAction>
-        </AtModal>
-
-        <AtModal isOpened={showAuth}>
-          <AtModalHeader>上传图片需要输入授权码</AtModalHeader>
+        <AtModal isOpened={lock}>
+          <AtModalHeader>请输入相册密码</AtModalHeader>
           <AtModalContent>
             <AtInput
               name="value"
-              title="授权码"
+              title="密码"
               type="text"
-              placeholder="请输入授权码"
-              value={authCode}
-              onChange={this.handleChangeAuthCode.bind(this)}
+              placeholder="请输入密码"
+              value={this.state.password}
+              onChange={this.handleChangePassword.bind(this)}
             />
           </AtModalContent>
           <AtModalAction>
-            <Button onClick={this.handleAuth.bind(this, false)}>
-              取消
-            </Button>
-            <Button onClick={this.handleAuth.bind(this, true)}>确定</Button>
+            <Button onClick={this.handleConfirm}>确定</Button>
           </AtModalAction>
         </AtModal>
-        <View className="fab-box">
-          <AtFab>
-            <Text
-              className="at-fab__icon at-icon at-icon-add-circle"
-              onClick={this.handleAddAlbum.bind(this)}
-            />
-          </AtFab>
-        </View>
-        {showBottomTabBar ? (
-          <AtTabBar
-            fixed
-            tabList={tabList}
-            onClick={this.handleClickTabBar.bind(this)}
-            current={-1}
-          />
-        ) : null}
-        <AtActionSheet
-          isOpened={showDelSheet}
-          title="是否要删除所选照片？删除后不可恢复！"
-          onClose={this.handleCloseSheet.bind(this)}
-        >
-          <AtActionSheetItem onClick={this.delAllSelectPhotos.bind(this)}>
-            <Text style="color:red">删除照片</Text>
-          </AtActionSheetItem>
-        </AtActionSheet>
       </View>
     );
   }

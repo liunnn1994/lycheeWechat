@@ -2,7 +2,7 @@
 import request from "../utils/request";
 import Taro from "@tarojs/taro";
 import qs from "qs";
-import {apiUrl, noticeUri, authUri} from "./urls";
+import { apiUrl, noticeUri, authUri } from "./urls";
 
 /**
  * @description 获取相册,带上cookie
@@ -19,14 +19,15 @@ export const getAlbums = () => {
 /**
  * @description 通过相册ID获取图片
  * @param {String} albumID - 相册ID
+ * @param {String} password - 相册密码
  * */
-export const getImagesByAlbumID = (albumID: string) => {
+export const getImagesByAlbumID = (albumID: string, password: string = "") => {
   return request.post(
     apiUrl,
     qs.stringify({
       function: "Album::get",
       albumID,
-      password: ""
+      password
     })
   );
 };
@@ -120,3 +121,18 @@ export const getNotice = () => request.get(noticeUri);
  * @description 获取验证码
  * */
 export const getAuthCode = () => request.get(authUri);
+/**
+ * @description 验证公共相册密码
+ * @param {String} albumID - 相册id
+ * @param {String} password - 相册密码
+ * */
+export const getPublic = (albumID: string, password: string = "") => {
+  return request.post(
+    apiUrl,
+    qs.stringify({
+      function: "Album::getPublic",
+      albumID,
+      password
+    })
+  );
+};

@@ -1,158 +1,144 @@
 import Taro, { Component, Config } from "@tarojs/taro";
-import { View, Button } from "@tarojs/components";
+import { Text, View, Button, ScrollView } from "@tarojs/components";
 import {
-  AtToast,
-  AtInput,
   AtModal,
   AtModalHeader,
   AtModalContent,
-  AtModalAction
+  AtModalAction,
+  AtSearchBar,
+  AtList,
+  AtListItem
 } from "taro-ui";
-import { logIn } from "../../api/user";
+import { getNotice, getAlbums } from "../../api/gallery";
+import { familyGIF, lockGIF } from "../../static/base64Imgs";
+import { domain } from "../../api/urls";
+import { message } from "../../utils/public";
 import "./index.scss";
 
 const imageUrl = require("../../static/family.png");
 
 interface IProps {}
+
 interface IState {
-  isLogin: boolean;
-  redirectLoading: boolean;
-  showError: boolean;
-  loginLoading: boolean;
-  user: string;
-  password: string;
-  errorText: string;
-  loginText: string;
-  loginIcon: "error" | "success" | "loading" | undefined;
-  userErrorClass: string;
-  passwordErrorClass: string;
-  timer: any;
+  showNotice: boolean;
+  notice: string;
+  searchValue: string;
+  scrollViewHeight: number;
+  albums: {
+    id: string;
+    visible: boolean;
+    title: string;
+    sysdate: string;
+    lock: string;
+    thumb: string;
+  }[];
+  // 相册数据
+  url: string;
 }
 
-export default class Index extends Component<IProps, IState> {
-  /**
-   * 指定config的类型声明为: Taro.Config
-   *
-   * 由于 typescript 对于 object 类型推导只能推出 Key 的基本类型
-   * 对于像 navigationBarTextStyle: 'black' 这样的推导出的类型是 string
-   * 提示和声明 navigationBarTextStyle: 'black' | 'white' 类型冲突, 需要显示声明类型
-   */
-  // eslint-disable-next-line react/sort-comp
+export default class Gallery extends Component<IProps, IState> {
   config: Config = {
-    navigationBarTitleText: "刘家大院"
+    navigationBarTitleText: "刘家大宅院",
+    backgroundTextStyle: "dark",
+    enablePullDownRefresh: true,
+    onReachBottomDistance: 50
   };
+  static options = {
+    addGlobalClass: true
+  };
+
   constructor(props: IProps) {
     super(props);
     this.state = {
-      isLogin: false,
-      showError: false,
-      loginLoading: false,
-      redirectLoading: false,
-      user: "",
-      password: "",
-      errorText: "",
-      loginText: "",
-      loginIcon: "error",
-      userErrorClass: "",
-      passwordErrorClass: "",
-      timer: null
+      albums: [],
+      showNotice: false,
+      notice: "",
+      searchValue: "",
+      url: domain,
+      scrollViewHeight: 0
     };
   }
-  closeError() {
-    this.setState({
-      showError: false,
-      errorText: ""
-    });
+
+  onPullDownRefresh() {
+    // 下拉开始
+    this.loadGallery();
   }
-  getCookie(name: string, c: []) {
-    let arr,
-      reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
-    const cookie = c.join(";");
-    arr = cookie.match(reg);
-    if (arr) return unescape(arr[2]);
-    else return null;
-  }
-  handleLogin() {
-    const { user, password } = this.state;
-    this.setState({
-      loginLoading: true
-    });
-    logIn(user, password)
-      .then((res: any) => {
-        this.setState({
-          loginLoading: false
-        });
-        if (res.data) {
-          Taro.setStorageSync("user", user);
-          Taro.setStorageSync("password", password);
-          Taro.setStorageSync(
-            "cookie",
-            this.getCookie("PHPSESSID", res.headers["set-cookie"])
+
+  loadGallery() {
+    message("时光机加载中，请稍后！", "loading", 60000);
+    this.setState(
+      {
+        albums: []
+      },
+      () => {
+        getAlbums().then(res => {
+          message("加载成功！", "success");
+          Taro.stopPullDownRefresh();
+          this.setState(
+            {
+              albums: res.data.albums.map(al => ({
+                id: al.id,
+                visible: false,
+                title: al.title,
+                sysdate: al.sysdate,
+                lock: al.password.toString() === "1",
+                thumb:
+                  al.password.toString() === "1"
+                    ? lockGIF
+                    : al.thumbs[0]
+                    ? `${domain}${al.thumbs[0]}`
+                    : familyGIF
+              }))
+            },
+            () => {
+              this.showGallery();
+            }
           );
-          this.setState({
-            loginText: `登陆成功！即将跳转。`,
-            redirectLoading: true,
-            loginIcon: "success"
-          });
-          setTimeout(() => {
-            Taro.redirectTo({
-              url: "/pages/gallery/index"
-            });
-          }, 1000);
-        } else {
-          this.setState({
-            loginText: `密码错误，请重试！`,
-            redirectLoading: true,
-            loginIcon: "error"
-          });
-        }
-      })
-      .catch(() => {
-        this.setState({
-          loginLoading: false
         });
-      });
+      }
+    );
   }
-  onSubmit() {
-    const { user, password, timer } = this.state;
-    clearTimeout(timer);
-    if (user === "") {
-      this.setState({
-        showError: true,
-        errorText: "用户名不能为空！",
-        userErrorClass: "shake animated",
-        passwordErrorClass: ""
-      });
-      "shake animated";
-    } else if (password === "") {
-      this.setState({
-        showError: true,
-        errorText: "密码不能为空！",
-        passwordErrorClass: "shake animated",
-        userErrorClass: ""
-      });
-    } else {
-      this.handleLogin();
+  showGallery(index = 0) {
+    const { albums } = this.state;
+    this.setState(
+      {
+        albums: albums.map((al, i) => {
+          if (i === index) {
+            al.visible = true;
+          }
+          return al;
+        })
+      },
+      () => {
+        if (index < albums.length - 1) {
+          this.showGallery(index + 1);
+        }
+      }
+    );
+  }
+  getNotice() {
+    getNotice().then(res => {
+      const noticeAgain = Taro.getStorageSync("noticeAgain");
+      const notice = Taro.getStorageSync("notice");
+      if (noticeAgain !== false || notice !== res.data) {
+        this.setState({
+          showNotice: true,
+          notice: res.data
+        });
+      }
+      Taro.setStorageSync("notice", res.data);
+    });
+  }
+
+  closeNotice(val) {
+    if (!val) {
+      Taro.setStorageSync("noticeAgain", val);
     }
     this.setState({
-      timer: setTimeout(() => {
-        this.setState({
-          showError: false,
-          errorText: ""
-        });
-      }, 3000)
+      showNotice: false
     });
   }
-  handleChange(type, val) {
-    let state = {};
-    state[type] = val;
-    this.setState(state);
-  }
-  handleCloseToast(key) {
-    let obj = {};
-    obj[key] = false;
-    this.setState(obj);
-  }
+
   onShareAppMessage() {
     return {
       title: "欢迎光临刘家大宅院",
@@ -161,87 +147,113 @@ export default class Index extends Component<IProps, IState> {
     };
   }
   componentDidMount() {
-    const user = Taro.getStorageSync("user");
-    const password = Taro.getStorageSync("password");
-    if (user && password) {
-      this.setState(
-        {
-          user,
-          password
-        },
-        () => {
-          this.handleLogin();
-        }
-      );
+    const query = Taro.createSelectorQuery();
+    query.select("#search-bar").boundingClientRect();
+    query.exec(res => {
+      //res就是 所有标签为mjltest的元素的信息 的数组
+      this.setState({
+        scrollViewHeight:
+          Taro.getSystemInfoSync().windowHeight -
+          res.find(item => item.id === "search-bar").height
+      });
+    });
+    this.getNotice();
+    this.loadGallery();
+  }
+  handleChangeSearch(searchValue) {
+    this.setState({
+      searchValue
+    });
+  }
+  handleActionClick() {
+    const { searchValue } = this.state;
+    if (searchValue === "") {
+      this.setState({
+        albums: this.state.albums.map(al => {
+          al.visible = true;
+          return al;
+        })
+      });
+    } else {
+      const reg = RegExp(searchValue, "gi");
+      this.setState({
+        albums: this.state.albums.map(al => {
+          al.visible = !!reg.test(al.title);
+          return al;
+        })
+      });
     }
+  }
+  handleClearSearch() {
+    this.setState({
+      albums: this.state.albums.map(al => {
+        al.visible = true;
+        return al;
+      }),
+      searchValue: ""
+    });
+  }
+  handleClickAlbum(al) {
+    Taro.navigateTo({
+      url: `/pages/galleryDetails/index?id=${al.id}&title=${al.title}&lock=${al.lock}`
+    });
   }
   render() {
     const {
-      errorText,
-      isLogin,
-      user,
-      password,
-      showError,
-      loginLoading,
-      redirectLoading,
-      loginText,
-      loginIcon,
-      passwordErrorClass,
-      userErrorClass
+      showNotice,
+      notice,
+      scrollViewHeight,
+      searchValue,
+      albums
     } = this.state;
     return (
       <View>
-        <AtModal isOpened={!isLogin} closeOnClickOverlay={false}>
-          <AtModalHeader>欢迎来到刘家大院</AtModalHeader>
+        <View id="search-bar">
+          <AtSearchBar
+            value={searchValue}
+            onChange={this.handleChangeSearch.bind(this)}
+            onClear={this.handleClearSearch.bind(this)}
+            onActionClick={this.handleActionClick.bind(this)}
+          />
+        </View>
+
+        <AtList>
+          <ScrollView
+            enableBackToTop={true}
+            scrollY={true}
+            scrollWithAnimation={true}
+            style={`height:${scrollViewHeight}px`}
+          >
+            {albums.map((al, index) => {
+              const sysdate = new Date(al.sysdate);
+              return (
+                <AtListItem
+                  key={index}
+                  className={al.visible ? "bounceInLeft animated" : "hide"}
+                  title={al.title}
+                  note={`创建时间：${sysdate.getFullYear()}年${sysdate.getMonth() +
+                    1}月`}
+                  extraText={`${al.lock ? "🔒 " : ""}查看相册`}
+                  arrow="right"
+                  thumb={al.thumb}
+                  onClick={this.handleClickAlbum.bind(this, al)}
+                />
+              );
+            })}
+          </ScrollView>
+        </AtList>
+        <AtModal isOpened={showNotice}>
+          <AtModalHeader>通知</AtModalHeader>
           <AtModalContent>
-            <AtInput
-              className={userErrorClass}
-              name="user"
-              title="用户名"
-              type="text"
-              placeholder="请输入用户名"
-              value={user}
-              onChange={this.handleChange.bind(this, "user")}
-            />
-            <AtInput
-              className={passwordErrorClass}
-              name="password"
-              title="密码"
-              type="password"
-              placeholder="请输入密码"
-              value={password}
-              onChange={this.handleChange.bind(this, "password")}
-            />
+            <Text>{notice}</Text>
           </AtModalContent>
           <AtModalAction>
-            <Button onClick={this.onSubmit.bind(this)}>登录</Button>
+            <Button onClick={this.closeNotice.bind(this, false)}>
+              有新消息前不再提示
+            </Button>
+            <Button onClick={this.closeNotice.bind(this, true)}>关闭</Button>
           </AtModalAction>
         </AtModal>
-        <AtToast
-          onClick={this.closeError.bind(this)}
-          hasMask
-          isOpened={showError}
-          text={errorText}
-          icon="close-circle"
-          onClose={this.handleCloseToast.bind(this, "showError")}
-        />
-        <AtToast
-          duration={0}
-          hasMask
-          isOpened={loginLoading}
-          status="loading"
-          text="登陆中，请稍后。"
-          icon="loading"
-          onClose={this.handleCloseToast.bind(this, "loginLoading")}
-        />
-        <AtToast
-          duration={0}
-          hasMask
-          isOpened={redirectLoading}
-          text={loginText}
-          status={loginIcon}
-          onClose={this.handleCloseToast.bind(this, "redirectLoading")}
-        />
       </View>
     );
   }

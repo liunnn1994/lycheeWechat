@@ -1,8 +1,8 @@
 Arguments: 
-  C:\Program Files\nodejs\node.exe C:\Program Files (x86)\Yarn\bin\yarn.js add babel-runtime
+  C:\Program Files\nodejs\node.exe C:\Program Files (x86)\Yarn\bin\yarn.js add prettier
 
 PATH: 
-  C:\Program Files\cmder\vendor\conemu-maximus5\ConEmu\Scripts;C:\Program Files\cmder\vendor\conemu-maximus5;C:\Program Files\cmder\vendor\conemu-maximus5\ConEmu;C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.2\bin;C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.2\libnvvp;C:\Program Files\Microsoft MPI\Bin\;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\Program Files (x86)\Intel\Intel(R) Management Engine Components\DAL;C:\Program Files\Intel\Intel(R) Management Engine Components\DAL;C:\Program Files\Git\cmd;C:\Users\keepsoft\AppData\Roaming\nvm;C:\Program Files\nodejs;C:\WINDOWS\System32\OpenSSH\;C:\Python27;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Program Files\NVIDIA Corporation\NVIDIA NvDLISR;C:\Program Files (x86)\Yarn\bin\;C:\Program Files\GDAL;C:\Program Files\nodejs\;C:\Program Files\NVIDIA Corporation\Nsight Compute 2019.5.0\;C:\Python27\;C:\Program Files\Bandizip\;C:\Users\keepsoft\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\keepsoft\AppData\Local\Microsoft\WindowsApps;C:\Program Files\JetBrains\WebStorm 2019.3.1\bin;C:\Users\keepsoft\AppData\Local\Yarn\bin;C:\Users\keepsoft\AppData\Roaming\npm;C:\Program Files\Git\cmd;C:\Program Files\Git\mingw64\bin;C:\Program Files\Git\usr\bin;C:\Program Files\cmder\vendor\bin;C:\Program Files\cmder\bin;C:\Program Files\cmder;C:\Program Files\cmder\vendor\git-for-windows\cmd;C:\Program Files\cmder\vendor\git-for-windows\mingw64\bin;C:\Program Files\cmder\vendor\git-for-windows\usr\bin;C:\Program Files\cmder\vendor\bin;C:\Program Files\cmder
+  C:\Program Files\cmder\vendor\conemu-maximus5\ConEmu\Scripts;C:\Program Files\cmder\vendor\conemu-maximus5;C:\Program Files\cmder\vendor\conemu-maximus5\ConEmu;C:\Program Files (x86)\Common Files\Intel\Shared Libraries\redist\intel64\compiler;C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.2\bin;C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.2\libnvvp;C:\Program Files\Microsoft MPI\Bin\;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\Program Files (x86)\Intel\Intel(R) Management Engine Components\DAL;C:\Program Files\Intel\Intel(R) Management Engine Components\DAL;C:\Program Files\Git\cmd;C:\Users\keepsoft\AppData\Roaming\nvm;C:\Program Files\nodejs;C:\WINDOWS\System32\OpenSSH\;C:\Python27;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Program Files\NVIDIA Corporation\NVIDIA NvDLISR;C:\Program Files (x86)\Yarn\bin\;C:\Program Files\GDAL;C:\Program Files\nodejs\;C:\Program Files\NVIDIA Corporation\Nsight Compute 2019.5.0\;C:\Python27\;C:\Program Files\Bandizip\;C:\Users\keepsoft\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\keepsoft\AppData\Local\Microsoft\WindowsApps;C:\Program Files\JetBrains\WebStorm 2019.3.1\bin;C:\Users\keepsoft\AppData\Local\Yarn\bin;C:\Users\keepsoft\AppData\Roaming\npm;C:\Program Files\Git\cmd;C:\Program Files\Git\mingw64\bin;C:\Program Files\Git\usr\bin;C:\Program Files\cmder\vendor\bin;C:\Program Files\cmder\bin;C:\Program Files\cmder;C:\Program Files\cmder\vendor\git-for-windows\cmd;C:\Program Files\cmder\vendor\git-for-windows\mingw64\bin;C:\Program Files\cmder\vendor\git-for-windows\usr\bin;C:\Program Files\cmder\vendor\bin;C:\Program Files\cmder
 
 Yarn version: 
   1.21.1
@@ -14,7 +14,7 @@ Platform:
   win32 x64
 
 Trace: 
-  Error: EPERM: operation not permitted, unlink 'E:\learn\wechat\family_liu\node_modules\_@babel_code-frame@7.0.0-beta.44@@babel\code-frame'
+  Error: EPERM: operation not permitted, unlink 'E:\learn\wechat\family_liu\node_modules\mini-css-extract-plugin\node_modules\.bin'
 
 npm manifest: 
   {
@@ -59,6 +59,7 @@ npm manifest:
   		"@tarojs/taro-swan": "1.3.32",
   		"@tarojs/taro-tt": "1.3.32",
   		"@tarojs/taro-weapp": "1.3.32",
+  		"babel-runtime": "^6.26.0",
   		"core-js": "^3.6.1",
   		"flyio": "^0.6.14",
   		"nerv-devtools": "^1.5.6",
@@ -68,29 +69,30 @@ npm manifest:
   		"taro-ui": "^2.2.4"
   	},
   	"devDependencies": {
-  		"@types/react": "^16.4.6",
-  		"@types/webpack-env": "^1.13.6",
   		"@tarojs/plugin-babel": "1.3.32",
   		"@tarojs/plugin-csso": "1.3.32",
   		"@tarojs/plugin-sass": "1.3.32",
   		"@tarojs/plugin-uglifyjs": "1.3.32",
   		"@tarojs/webpack-runner": "1.3.32",
+  		"@types/react": "^16.4.6",
+  		"@types/webpack-env": "^1.13.6",
+  		"@typescript-eslint/parser": "^1.6.0",
+  		"babel-eslint": "^8.2.3",
   		"babel-plugin-transform-class-properties": "^6.24.1",
   		"babel-plugin-transform-decorators-legacy": "^1.3.4",
   		"babel-plugin-transform-jsx-stylesheet": "^0.6.5",
   		"babel-plugin-transform-object-rest-spread": "^6.26.0",
+  		"babel-plugin-transform-runtime": "^6.23.0",
   		"babel-preset-env": "^1.6.1",
-  		"babel-eslint": "^8.2.3",
   		"eslint": "^5.16.0",
   		"eslint-config-taro": "1.3.32",
+  		"eslint-plugin-import": "^2.12.0",
   		"eslint-plugin-react": "^7.8.2",
   		"eslint-plugin-react-hooks": "^1.6.1",
-  		"eslint-plugin-import": "^2.12.0",
+  		"eslint-plugin-taro": "1.3.32",
   		"stylelint": "9.3.0",
   		"stylelint-config-taro-rn": "1.3.32",
   		"stylelint-taro-rn": "1.3.32",
-  		"eslint-plugin-taro": "1.3.32",
-  		"@typescript-eslint/parser": "^1.6.0",
   		"typescript": "^3.0.1"
   	}
   }
@@ -217,15 +219,15 @@ Lockfile:
     resolved "http://172.16.104.140:4873/@nodelib%2ffs.stat/-/fs.stat-1.1.3.tgz#2b5a3ab3f918cca48a8c754c08168e3f03eba61b"
     integrity sha1-K1o6s/kYzKSKjHVMCBaOPwPrphs=
   
-  "@tarojs/components-qa@1.3.27":
-    version "1.3.27"
-    resolved "http://172.16.104.140:4873/@tarojs%2fcomponents-qa/-/components-qa-1.3.27.tgz#2303e2d59fa6866c6bf55e00aaf07f817b5cef33"
-    integrity sha1-IwPi1Z+mhmxr9V4AqvB/gXtc7zM=
+  "@tarojs/components-qa@1.3.32":
+    version "1.3.32"
+    resolved "http://172.16.104.140:4873/@tarojs%2fcomponents-qa/-/components-qa-1.3.32.tgz#d8fdf83cfc256e3601eb16a838b1cc74a0b611e2"
+    integrity sha1-2P34PPwlbjYB6xaoOLHMdKC2EeI=
   
-  "@tarojs/components@1.3.27":
-    version "1.3.27"
-    resolved "http://172.16.104.140:4873/@tarojs%2fcomponents/-/components-1.3.27.tgz#e360328d5473f1459f18f59bf60c969f32e809f5"
-    integrity sha1-42AyjVRz8UWfGPWb9gyWnzLoCfU=
+  "@tarojs/components@1.3.32":
+    version "1.3.32"
+    resolved "http://172.16.104.140:4873/@tarojs%2fcomponents/-/components-1.3.32.tgz#9e0bd26f90fab8a5d2927b6daaf739dba80f0c26"
+    integrity sha1-ngvSb5D6uKXSknttqvc526gPDCY=
     dependencies:
       better-scroll "^1.14.1"
       classnames "^2.2.5"
@@ -235,39 +237,39 @@ Lockfile:
       swiper "4.4.2"
       weui "^1.1.2"
   
-  "@tarojs/plugin-babel@1.3.27":
-    version "1.3.27"
-    resolved "http://172.16.104.140:4873/@tarojs%2fplugin-babel/-/plugin-babel-1.3.27.tgz#fefc3de3f8ae50bb1fe5b82d7e60d46c9b55ec8b"
-    integrity sha1-/vw94/iuULsf5bgtfmDUbJtV7Is=
+  "@tarojs/plugin-babel@1.3.32":
+    version "1.3.32"
+    resolved "http://172.16.104.140:4873/@tarojs%2fplugin-babel/-/plugin-babel-1.3.32.tgz#5bf5184eeb8b2915fad5b0944cf6387fdde655dd"
+    integrity sha1-W/UYTuuLKRX61bCUTPY4f93mVd0=
     dependencies:
       babel-core "^6.26.0"
   
-  "@tarojs/plugin-csso@1.3.27":
-    version "1.3.27"
-    resolved "http://172.16.104.140:4873/@tarojs%2fplugin-csso/-/plugin-csso-1.3.27.tgz#84a9d1fa9352e461526355f0df6956790924a9a1"
-    integrity sha1-hKnR+pNS5GFSY1Xw32lWeQkkqaE=
+  "@tarojs/plugin-csso@1.3.32":
+    version "1.3.32"
+    resolved "http://172.16.104.140:4873/@tarojs%2fplugin-csso/-/plugin-csso-1.3.32.tgz#76dbe320fa526bde4075c2a68d77fa8a51f92431"
+    integrity sha1-dtvjIPpSa95AdcKmjXf6ilH5JDE=
     dependencies:
       csso "^3.5.0"
   
-  "@tarojs/plugin-sass@1.3.27":
-    version "1.3.27"
-    resolved "http://172.16.104.140:4873/@tarojs%2fplugin-sass/-/plugin-sass-1.3.27.tgz#37672949bee155b90839a40bd0ac2fc6a9b90b72"
-    integrity sha1-N2cpSb7hVbkIOaQL0Kwvxqm5C3I=
+  "@tarojs/plugin-sass@1.3.32":
+    version "1.3.32"
+    resolved "http://172.16.104.140:4873/@tarojs%2fplugin-sass/-/plugin-sass-1.3.32.tgz#9cd4342e5e409940143da71062986dc488e3233d"
+    integrity sha1-nNQ0Ll5AmUAUPacQYphtxIjjIz0=
     dependencies:
       node-sass "^4.12.0"
       scss-bundle "^2.5.1"
   
-  "@tarojs/plugin-uglifyjs@1.3.27":
-    version "1.3.27"
-    resolved "http://172.16.104.140:4873/@tarojs%2fplugin-uglifyjs/-/plugin-uglifyjs-1.3.27.tgz#96404223ab86087af30a50f3e90dad389a2c5d8e"
-    integrity sha1-lkBCI6uGCHrzClDz6Q2tOJosXY4=
+  "@tarojs/plugin-uglifyjs@1.3.32":
+    version "1.3.32"
+    resolved "http://172.16.104.140:4873/@tarojs%2fplugin-uglifyjs/-/plugin-uglifyjs-1.3.32.tgz#76415d644ed6e83e4113e81fae67cf90a2e4800f"
+    integrity sha1-dkFdZE7W6D5BE+gfrmfPkKLkgA8=
     dependencies:
       uglify-js "^3.3.24"
   
-  "@tarojs/router@1.3.27":
-    version "1.3.27"
-    resolved "http://172.16.104.140:4873/@tarojs%2frouter/-/router-1.3.27.tgz#332a12ef626106487a8b949bacc8bbc13e62fe6d"
-    integrity sha1-MyoS72JhBkh6i5SbrMi7wT5i/m0=
+  "@tarojs/router@1.3.32":
+    version "1.3.32"
+    resolved "http://172.16.104.140:4873/@tarojs%2frouter/-/router-1.3.32.tgz#6ca3301bead1ad319289d45ca0ae74c4b98ee0f2"
+    integrity sha1-bKMwG+rRrTGSidRcoK50xLmO4PI=
     dependencies:
       invariant "2.2.4"
       lodash "4.17.13"
@@ -276,20 +278,20 @@ Lockfile:
       value-equal "0.4.0"
       warning "4.0.2"
   
-  "@tarojs/taro-alipay@1.3.27":
-    version "1.3.27"
-    resolved "http://172.16.104.140:4873/@tarojs%2ftaro-alipay/-/taro-alipay-1.3.27.tgz#da4334612247a55423c74b85ceff178b3bd1f766"
-    integrity sha1-2kM0YSJHpVQjx0uFzv8XizvR92Y=
+  "@tarojs/taro-alipay@1.3.32":
+    version "1.3.32"
+    resolved "http://172.16.104.140:4873/@tarojs%2ftaro-alipay/-/taro-alipay-1.3.32.tgz#130a159e778f65ecc582855dc171c1e524db3eee"
+    integrity sha1-EwoVnnePZezFgoVdwXHB5STbPu4=
     dependencies:
-      "@tarojs/taro" "1.3.27"
-      "@tarojs/utils" "1.3.27"
+      "@tarojs/taro" "1.3.32"
+      "@tarojs/utils" "1.3.32"
       lodash "^4.17.10"
       prop-types "^15.6.1"
   
-  "@tarojs/taro-h5@1.3.27":
-    version "1.3.27"
-    resolved "http://172.16.104.140:4873/@tarojs%2ftaro-h5/-/taro-h5-1.3.27.tgz#0ea4aca5f74d81dd80eb8ff9b3a9607a033ad990"
-    integrity sha1-DqSspfdNgd2A64/5s6lgegM62ZA=
+  "@tarojs/taro-h5@1.3.32":
+    version "1.3.32"
+    resolved "http://172.16.104.140:4873/@tarojs%2ftaro-h5/-/taro-h5-1.3.32.tgz#3c6069910f981f01e357a263a38aa93cdedb9067"
+    integrity sha1-PGBpkQ+YHwHjV6Jjo4qpPN7bkGc=
     dependencies:
       base64-js "^1.3.0"
       jsonp-retry "^1.0.3"
@@ -297,81 +299,81 @@ Lockfile:
       raf "^3.4.1"
       whatwg-fetch "^2.0.4"
   
-  "@tarojs/taro-qq@1.3.27":
-    version "1.3.27"
-    resolved "http://172.16.104.140:4873/@tarojs%2ftaro-qq/-/taro-qq-1.3.27.tgz#08350337100b2b6955a4f4678f1d8648064653ee"
-    integrity sha1-CDUDNxALK2lVpPRnjx2GSAZGU+4=
+  "@tarojs/taro-qq@1.3.32":
+    version "1.3.32"
+    resolved "http://172.16.104.140:4873/@tarojs%2ftaro-qq/-/taro-qq-1.3.32.tgz#45ff631e061ac9fe55bdc70b21e9a34c6a0dbd00"
+    integrity sha1-Rf9jHgYayf5VvccLIemjTGoNvQA=
     dependencies:
-      "@tarojs/taro" "1.3.27"
-      "@tarojs/utils" "1.3.27"
+      "@tarojs/taro" "1.3.32"
+      "@tarojs/utils" "1.3.32"
       lodash "^4.17.10"
       prop-types "^15.6.1"
   
-  "@tarojs/taro-quickapp@1.3.27":
-    version "1.3.27"
-    resolved "http://172.16.104.140:4873/@tarojs%2ftaro-quickapp/-/taro-quickapp-1.3.27.tgz#24152423c1eabfcac2b4c4bf4a2c90dbc7ece573"
-    integrity sha1-JBUkI8Hqv8rCtMS/SiyQ28fs5XM=
+  "@tarojs/taro-quickapp@1.3.32":
+    version "1.3.32"
+    resolved "http://172.16.104.140:4873/@tarojs%2ftaro-quickapp/-/taro-quickapp-1.3.32.tgz#ed9c7e9a3363df3ab3e103abeb67a10f3655e29f"
+    integrity sha1-7Zx+mjNj3zqz4QOr62ehDzZV4p8=
     dependencies:
-      "@tarojs/taro" "1.3.27"
-      "@tarojs/utils" "1.3.27"
+      "@tarojs/taro" "1.3.32"
+      "@tarojs/utils" "1.3.32"
       lodash "^4.17.10"
       prop-types "^15.6.1"
   
-  "@tarojs/taro-swan@1.3.27":
-    version "1.3.27"
-    resolved "http://172.16.104.140:4873/@tarojs%2ftaro-swan/-/taro-swan-1.3.27.tgz#91e5f3005f23707fa3807b9bfe7e8d096da65cdb"
-    integrity sha1-keXzAF8jcH+jgHub/n6NCW2mXNs=
+  "@tarojs/taro-swan@1.3.32":
+    version "1.3.32"
+    resolved "http://172.16.104.140:4873/@tarojs%2ftaro-swan/-/taro-swan-1.3.32.tgz#ef0cea4d0cb1328cc68fa921afa717ab92ecb139"
+    integrity sha1-7wzqTQyxMozGj6khr6cXq5LssTk=
     dependencies:
-      "@tarojs/taro" "1.3.27"
-      "@tarojs/utils" "1.3.27"
+      "@tarojs/taro" "1.3.32"
+      "@tarojs/utils" "1.3.32"
       lodash "^4.17.10"
       prop-types "^15.6.1"
   
-  "@tarojs/taro-tt@1.3.27":
-    version "1.3.27"
-    resolved "http://172.16.104.140:4873/@tarojs%2ftaro-tt/-/taro-tt-1.3.27.tgz#5a2c76db004416be51f5b4e6c093041321c0e870"
-    integrity sha1-Wix22wBEFr5R9bTmwJMEEyHA6HA=
+  "@tarojs/taro-tt@1.3.32":
+    version "1.3.32"
+    resolved "http://172.16.104.140:4873/@tarojs%2ftaro-tt/-/taro-tt-1.3.32.tgz#89209787f682d423e49dbb43e5b26bfd40378198"
+    integrity sha1-iSCXh/aC1CPknbtD5bJr/UA3gZg=
     dependencies:
-      "@tarojs/taro" "1.3.27"
-      "@tarojs/utils" "1.3.27"
+      "@tarojs/taro" "1.3.32"
+      "@tarojs/utils" "1.3.32"
       lodash "^4.17.10"
       prop-types "^15.6.1"
   
-  "@tarojs/taro-weapp@1.3.27":
-    version "1.3.27"
-    resolved "http://172.16.104.140:4873/@tarojs%2ftaro-weapp/-/taro-weapp-1.3.27.tgz#1a0fe9317813e4462d3955326071c10f98359c88"
-    integrity sha1-Gg/pMXgT5EYtOVUyYHHBD5g1nIg=
+  "@tarojs/taro-weapp@1.3.32":
+    version "1.3.32"
+    resolved "http://172.16.104.140:4873/@tarojs%2ftaro-weapp/-/taro-weapp-1.3.32.tgz#b9aea9741811275e5bd677e7d5b9a285e68b20b8"
+    integrity sha1-ua6pdBgRJ15b1nfn1bmiheaLILg=
     dependencies:
-      "@tarojs/taro" "1.3.27"
-      "@tarojs/utils" "1.3.27"
+      "@tarojs/taro" "1.3.32"
+      "@tarojs/utils" "1.3.32"
       lodash "^4.17.10"
       prop-types "^15.6.1"
   
-  "@tarojs/taro@1.3.27":
-    version "1.3.27"
-    resolved "http://172.16.104.140:4873/@tarojs%2ftaro/-/taro-1.3.27.tgz#5664841b46aaf0790f5f95d2f598424d2300c6b7"
-    integrity sha1-VmSEG0aq8HkPX5XS9ZhCTSMAxrc=
+  "@tarojs/taro@1.3.32":
+    version "1.3.32"
+    resolved "http://172.16.104.140:4873/@tarojs%2ftaro/-/taro-1.3.32.tgz#af2b70f2ccccd3a9537a79dc05f2fd1b8e1dedad"
+    integrity sha1-rytw8szM06lTenncBfL9G44d7a0=
     dependencies:
-      "@tarojs/utils" "1.3.27"
+      "@tarojs/utils" "1.3.32"
   
-  "@tarojs/utils@1.3.27":
-    version "1.3.27"
-    resolved "http://172.16.104.140:4873/@tarojs%2futils/-/utils-1.3.27.tgz#49d706afd10825fecec2d8a50414ab4a797fd7b6"
-    integrity sha1-SdcGr9EIJf7OwtilBBSrSnl/17Y=
+  "@tarojs/utils@1.3.32":
+    version "1.3.32"
+    resolved "http://172.16.104.140:4873/@tarojs%2futils/-/utils-1.3.32.tgz#6ed7dbb9218cf506391462bcd1748c179d9c0d9c"
+    integrity sha1-btfbuSGM9QY5FGK80XSMF52cDZw=
   
-  "@tarojs/webpack-runner@1.3.27":
-    version "1.3.27"
-    resolved "http://172.16.104.140:4873/@tarojs%2fwebpack-runner/-/webpack-runner-1.3.27.tgz#b6fdb524275c1c1e25d2155ac66f3dd3542ecebb"
-    integrity sha1-tv21JCdcHB4l0hVaxm8901Quzrs=
+  "@tarojs/webpack-runner@1.3.32":
+    version "1.3.32"
+    resolved "http://172.16.104.140:4873/@tarojs%2fwebpack-runner/-/webpack-runner-1.3.32.tgz#a5c9ce74f492eb70c8d504dac8c5152b81ba5e41"
+    integrity sha1-pcnOdPSS63DI1QTayMUVK4G6XkE=
     dependencies:
-      "@tarojs/plugin-sass" "1.3.27"
-      "@tarojs/taro-h5" "1.3.27"
+      "@tarojs/plugin-sass" "1.3.32"
+      "@tarojs/taro-h5" "1.3.32"
       autoprefixer "8.6.4"
       babel-core "6.26.0"
       babel-loader "7.1.4"
       babel-plugin-syntax-dynamic-import "6.18.0"
       babel-plugin-transform-react-jsx "6.24.1"
-      babel-plugin-transform-taroapi "1.3.27"
+      babel-plugin-transform-taroapi "1.3.32"
       babel-types "6.26.0"
       chalk "2.4.2"
       copy-webpack-plugin "^5.0.3"
@@ -388,8 +390,8 @@ Lockfile:
       opn "5.3.0"
       ora "2.1.0"
       postcss-loader "2.1.6"
-      postcss-plugin-constparse "1.3.27"
-      postcss-pxtransform "1.3.27"
+      postcss-plugin-constparse "1.3.32"
+      postcss-pxtransform "1.3.32"
       resolve "1.8.1"
       resolve-url-loader "2.3.0"
       sass "^1.23.1"
@@ -1530,6 +1532,13 @@ Lockfile:
     dependencies:
       regenerator-transform "^0.10.0"
   
+  babel-plugin-transform-runtime@^6.23.0:
+    version "6.23.0"
+    resolved "http://172.16.104.140:4873/babel-plugin-transform-runtime/-/babel-plugin-transform-runtime-6.23.0.tgz#88490d446502ea9b8e7efb0fe09ec4d99479b1ee"
+    integrity sha1-iEkNRGUC6puOfvsP4J7E2ZR5se4=
+    dependencies:
+      babel-runtime "^6.22.0"
+  
   babel-plugin-transform-strict-mode@^6.24.1:
     version "6.24.1"
     resolved "http://172.16.104.140:4873/babel-plugin-transform-strict-mode/-/babel-plugin-transform-strict-mode-6.24.1.tgz#d5faf7aa578a65bbe591cf5edae04a0c67020758"
@@ -1538,10 +1547,10 @@ Lockfile:
       babel-runtime "^6.22.0"
       babel-types "^6.24.1"
   
-  babel-plugin-transform-taroapi@1.3.27:
-    version "1.3.27"
-    resolved "http://172.16.104.140:4873/babel-plugin-transform-taroapi/-/babel-plugin-transform-taroapi-1.3.27.tgz#5e02b5c63d5074999a5ef96040adcba6ff21f7b2"
-    integrity sha1-XgK1xj1QdJmaXvlgQK3Lpv8h97I=
+  babel-plugin-transform-taroapi@1.3.32:
+    version "1.3.32"
+    resolved "http://172.16.104.140:4873/babel-plugin-transform-taroapi/-/babel-plugin-transform-taroapi-1.3.32.tgz#8ae9ec16b59336bd831f0aa0b1623f396fc1c42a"
+    integrity sha1-iunsFrWTNr2DHwqgsWI/OW/BxCo=
   
   babel-preset-env@^1.6.1:
     version "1.7.0"
@@ -2474,6 +2483,11 @@ Lockfile:
     resolved "http://172.16.104.140:4873/core-js/-/core-js-2.6.11.tgz#38831469f9922bded8ee21c9dc46985e0399308c"
     integrity sha1-OIMUafmSK97Y7iHJ3EaYXgOZMIw=
   
+  core-js@^3.6.1:
+    version "3.6.1"
+    resolved "http://172.16.104.140:4873/core-js/-/core-js-3.6.1.tgz#39d5e2e346258cc01eb7d44345b1c3c014ca3f05"
+    integrity sha1-OdXi40YljMAet9RDRbHDwBTKPwU=
+  
   core-util-is@1.0.2, core-util-is@~1.0.0:
     version "1.0.2"
     resolved "http://172.16.104.140:4873/core-util-is/-/core-util-is-1.0.2.tgz#b5fd54220aa2bc5ab57aab7140c940754503c1a7"
@@ -2694,7 +2708,7 @@ Lockfile:
     dependencies:
       ms "2.0.0"
   
-  debug@^3.0.0, debug@^3.1.0, debug@^3.1.1, debug@^3.2.5, debug@^3.2.6:
+  debug@^3.0.0, debug@^3.1.0, debug@^3.1.1, debug@^3.2.5:
     version "3.2.6"
     resolved "http://172.16.104.140:4873/debug/-/debug-3.2.6.tgz#e83d17de16d8a7efb7717edbe5fb10135eee629b"
     integrity sha1-6D0X3hbYp++3cX7b5fsQE17uYps=
@@ -2737,11 +2751,6 @@ Lockfile:
       object-is "^1.0.1"
       object-keys "^1.1.1"
       regexp.prototype.flags "^1.2.0"
-  
-  deep-extend@^0.6.0:
-    version "0.6.0"
-    resolved "http://172.16.104.140:4873/deep-extend/-/deep-extend-0.6.0.tgz#c4fa7c95404a17a9c3e8ca7e1537312b736330ac"
-    integrity sha1-xPp8lUBKF6nD6Mp+FTcxK3NjMKw=
   
   deep-is@~0.1.3:
     version "0.1.3"
@@ -2843,11 +2852,6 @@ Lockfile:
     integrity sha1-920GQ1LN9Docts5hnE7jqUdd4gg=
     dependencies:
       repeating "^2.0.0"
-  
-  detect-libc@^1.0.2:
-    version "1.0.3"
-    resolved "http://172.16.104.140:4873/detect-libc/-/detect-libc-1.0.3.tgz#fa137c4bd698edf55cd5cd02ac559f91a4c4ba9b"
-    integrity sha1-+hN8S9aY7fVc1c0CrFWfkaTEups=
   
   detect-node@^2.0.4:
     version "2.0.4"
@@ -3153,12 +3157,12 @@ Lockfile:
     resolved "http://172.16.104.140:4873/escape-string-regexp/-/escape-string-regexp-1.0.5.tgz#1b61c0562190a8dff6ae3bb2cf0200ca130b86d4"
     integrity sha1-G2HAViGQqN/2rjuyzwIAyhMLhtQ=
   
-  eslint-config-taro@1.3.27:
-    version "1.3.27"
-    resolved "http://172.16.104.140:4873/eslint-config-taro/-/eslint-config-taro-1.3.27.tgz#78517942f0df804056e77f3c48c741d259ac6578"
-    integrity sha1-eFF5QvDfgEBW5388SMdB0lmsZXg=
+  eslint-config-taro@1.3.32:
+    version "1.3.32"
+    resolved "http://172.16.104.140:4873/eslint-config-taro/-/eslint-config-taro-1.3.32.tgz#5f48334fdd8a06942744ef18243f7bac033e336f"
+    integrity sha1-X0gzT92KBpQnRO8YJD97rAM+M28=
     dependencies:
-      eslint-plugin-taro "1.3.27"
+      eslint-plugin-taro "1.3.32"
   
   eslint-import-resolver-node@^0.3.2:
     version "0.3.2"
@@ -3220,10 +3224,10 @@ Lockfile:
       prop-types "^15.7.2"
       resolve "^1.13.1"
   
-  eslint-plugin-taro@1.3.27:
-    version "1.3.27"
-    resolved "http://172.16.104.140:4873/eslint-plugin-taro/-/eslint-plugin-taro-1.3.27.tgz#2543392b8d9946a72b8cfaeae92f816c0e2e4c18"
-    integrity sha1-JUM5K42ZRqcrjPrq6S+BbA4uTBg=
+  eslint-plugin-taro@1.3.32:
+    version "1.3.32"
+    resolved "http://172.16.104.140:4873/eslint-plugin-taro/-/eslint-plugin-taro-1.3.32.tgz#d2f862c8dac92c250e14088edb0b7182d75dcc70"
+    integrity sha1-0vhiyNrJLCUOFAiO2wtxgtddzHA=
     dependencies:
       has "^1.0.1"
   
@@ -3818,13 +3822,6 @@ Lockfile:
       jsonfile "^4.0.0"
       universalify "^0.1.0"
   
-  fs-minipass@^1.2.5:
-    version "1.2.7"
-    resolved "http://172.16.104.140:4873/fs-minipass/-/fs-minipass-1.2.7.tgz#ccff8570841e7fe4265693da88936c55aed7f7c7"
-    integrity sha1-zP+FcIQef+QmVpPaiJNsVa7X98c=
-    dependencies:
-      minipass "^2.6.0"
-  
   fs-write-stream-atomic@^1.0.8:
     version "1.0.10"
     resolved "http://172.16.104.140:4873/fs-write-stream-atomic/-/fs-write-stream-atomic-1.0.10.tgz#b47df53493ef911df75731e70a9ded0189db40c9"
@@ -4344,7 +4341,7 @@ Lockfile:
     resolved "http://172.16.104.140:4873/https-browserify/-/https-browserify-1.0.0.tgz#ec06c10e0a34c0f2faf199f7fd7fc78fffd03c73"
     integrity sha1-7AbBDgo0wPL68Zn3/X/Hj//QPHM=
   
-  iconv-lite@0.4.24, iconv-lite@^0.4.24, iconv-lite@^0.4.4:
+  iconv-lite@0.4.24, iconv-lite@^0.4.24:
     version "0.4.24"
     resolved "http://172.16.104.140:4873/iconv-lite/-/iconv-lite-0.4.24.tgz#2022b4b25fbddc21d2f524974a474aafe733908b"
     integrity sha1-ICK0sl+93CHS9SSXSkdKr+czkIs=
@@ -4372,13 +4369,6 @@ Lockfile:
     version "0.1.5"
     resolved "http://172.16.104.140:4873/iferr/-/iferr-0.1.5.tgz#c60eed69e6d8fdb6b3104a1fcbca1c192dc5b501"
     integrity sha1-xg7taebY/bazEEofy8ocGS3FtQE=
-  
-  ignore-walk@^3.0.1:
-    version "3.0.3"
-    resolved "http://172.16.104.140:4873/ignore-walk/-/ignore-walk-3.0.3.tgz#017e2447184bfeade7c238e4aefdd1e8f95b1e37"
-    integrity sha1-AX4kRxhL/q3nwjjkrv3R6PlbHjc=
-    dependencies:
-      minimatch "^3.0.4"
   
   ignore@^3.3.3, ignore@^3.3.5:
     version "3.3.10"
@@ -4492,11 +4482,6 @@ Lockfile:
     version "2.0.3"
     resolved "http://172.16.104.140:4873/inherits/-/inherits-2.0.3.tgz#633c2c83e3da42a502f52466022480f4208261de"
     integrity sha1-Yzwsg+PaQqUC9SRmAiSA9CCCYd4=
-  
-  ini@~1.3.0:
-    version "1.3.5"
-    resolved "http://172.16.104.140:4873/ini/-/ini-1.3.5.tgz#eee25f56db1c9ec6085e0c22778083f596abf927"
-    integrity sha1-7uJfVtscnsYIXgwid4CD9Zar+Sc=
   
   inquirer@^6.2.2:
     version "6.5.2"
@@ -5685,25 +5670,10 @@ Lockfile:
     resolved "http://172.16.104.140:4873/minimist/-/minimist-1.2.0.tgz#a35008b20f41383eec1fb914f4cd5df79a264284"
     integrity sha1-o1AIsg9BOD7sH7kU9M1d95omQoQ=
   
-  minipass@^2.6.0, minipass@^2.8.6, minipass@^2.9.0:
-    version "2.9.0"
-    resolved "http://172.16.104.140:4873/minipass/-/minipass-2.9.0.tgz#e713762e7d3e32fed803115cf93e04bca9fcc9a6"
-    integrity sha1-5xN2Ln0+Mv7YAxFc+T4EvKn8yaY=
-    dependencies:
-      safe-buffer "^5.1.2"
-      yallist "^3.0.0"
-  
   miniraf@1.0.0:
     version "1.0.0"
     resolved "http://172.16.104.140:4873/miniraf/-/miniraf-1.0.0.tgz#5d88e108bbdcb55b4a2ff3da337f24a13a3377e1"
     integrity sha1-XYjhCLvctVtKL/PaM38koTozd+E=
-  
-  minizlib@^1.2.1:
-    version "1.3.3"
-    resolved "http://172.16.104.140:4873/minizlib/-/minizlib-1.3.3.tgz#2290de96818a34c29551c8a8d301216bd65a861d"
-    integrity sha1-IpDeloGKNMKVUcio0wEha9Zahh0=
-    dependencies:
-      minipass "^2.9.0"
   
   mississippi@^2.0.0:
     version "2.0.0"
@@ -5837,15 +5807,6 @@ Lockfile:
     resolved "http://172.16.104.140:4873/natural-compare/-/natural-compare-1.4.0.tgz#4abebfeed7541f2c27acfb29bdbbd15c8d5ba4f7"
     integrity sha1-Sr6/7tdUHywnrPspvbvRXI1bpPc=
   
-  needle@^2.2.1:
-    version "2.4.0"
-    resolved "http://172.16.104.140:4873/needle/-/needle-2.4.0.tgz#6833e74975c444642590e15a750288c5f939b57c"
-    integrity sha1-aDPnSXXERGQlkOFadQKIxfk5tXw=
-    dependencies:
-      debug "^3.2.6"
-      iconv-lite "^0.4.4"
-      sax "^1.2.4"
-  
   negotiator@0.6.2:
     version "0.6.2"
     resolved "http://172.16.104.140:4873/negotiator/-/negotiator-0.6.2.tgz#feacf7ccf525a77ae9634436a64883ffeca346fb"
@@ -5856,7 +5817,7 @@ Lockfile:
     resolved "http://172.16.104.140:4873/neo-async/-/neo-async-2.6.1.tgz#ac27ada66167fa8849a6addd837f6b189ad2081c"
     integrity sha1-rCetpmFn+ohJpq3dg39rGJrSCBw=
   
-  nerv-devtools@^1.5.5:
+  nerv-devtools@^1.5.6:
     version "1.5.6"
     resolved "http://172.16.104.140:4873/nerv-devtools/-/nerv-devtools-1.5.6.tgz#2af0ef109918e5a5a7282f2cfb8a0d7e4a2858be"
     integrity sha1-KvDvEJkY5aWnKC8s+4oNfkooWL4=
@@ -5875,7 +5836,7 @@ Lockfile:
     resolved "http://172.16.104.140:4873/nerv-utils/-/nerv-utils-1.4.5.tgz#3e017a8a1b605b35ee31ad396a038207fbc597b0"
     integrity sha1-PgF6ihtgWzXuMa05agOCB/vFl7A=
   
-  nervjs@1.5.6, nervjs@^1.5.5:
+  nervjs@1.5.6, nervjs@^1.5.6:
     version "1.5.6"
     resolved "http://172.16.104.140:4873/nervjs/-/nervjs-1.5.6.tgz#0451dd06993f7e3a885a6d1be3ea049ac51f1abd"
     integrity sha1-BFHdBpk/fjqIWm0b4+oEmsUfGr0=
@@ -5952,22 +5913,6 @@ Lockfile:
       util "^0.11.0"
       vm-browserify "^1.0.1"
   
-  node-pre-gyp@*:
-    version "0.14.0"
-    resolved "http://172.16.104.140:4873/node-pre-gyp/-/node-pre-gyp-0.14.0.tgz#9a0596533b877289bcad4e143982ca3d904ddc83"
-    integrity sha1-mgWWUzuHcom8rU4UOYLKPZBN3IM=
-    dependencies:
-      detect-libc "^1.0.2"
-      mkdirp "^0.5.1"
-      needle "^2.2.1"
-      nopt "^4.0.1"
-      npm-packlist "^1.1.6"
-      npmlog "^4.0.2"
-      rc "^1.2.7"
-      rimraf "^2.6.1"
-      semver "^5.3.0"
-      tar "^4.4.2"
-  
   node-sass@^4.10.0, node-sass@^4.12.0:
     version "4.13.0"
     resolved "http://172.16.104.140:4873/node-sass/-/node-sass-4.13.0.tgz#b647288babdd6a1cb726de4545516b31f90da066"
@@ -5997,14 +5942,6 @@ Lockfile:
     integrity sha1-xkZdvwirzU2zWTF/eaxopkayj/k=
     dependencies:
       abbrev "1"
-  
-  nopt@^4.0.1:
-    version "4.0.1"
-    resolved "http://172.16.104.140:4873/nopt/-/nopt-4.0.1.tgz#d0d4685afd5415193c8c7505602d0d17cd64474d"
-    integrity sha1-0NRoWv1UFRk8jHUFYC0NF81kR00=
-    dependencies:
-      abbrev "1"
-      osenv "^0.1.4"
   
   normalize-package-data@^2.3.2, normalize-package-data@^2.3.4:
     version "2.5.0"
@@ -6038,26 +5975,6 @@ Lockfile:
     resolved "http://172.16.104.140:4873/normalize-selector/-/normalize-selector-0.2.0.tgz#d0b145eb691189c63a78d201dc4fdb1293ef0c03"
     integrity sha1-0LFF62kRicY6eNIB3E/bEpPvDAM=
   
-  npm-bundled@^1.0.1:
-    version "1.1.1"
-    resolved "http://172.16.104.140:4873/npm-bundled/-/npm-bundled-1.1.1.tgz#1edd570865a94cdb1bc8220775e29466c9fb234b"
-    integrity sha1-Ht1XCGWpTNsbyCIHdeKUZsn7I0s=
-    dependencies:
-      npm-normalize-package-bin "^1.0.1"
-  
-  npm-normalize-package-bin@^1.0.1:
-    version "1.0.1"
-    resolved "http://172.16.104.140:4873/npm-normalize-package-bin/-/npm-normalize-package-bin-1.0.1.tgz#6e79a41f23fd235c0623218228da7d9c23b8f6e2"
-    integrity sha1-bnmkHyP9I1wGIyGCKNp9nCO49uI=
-  
-  npm-packlist@^1.1.6:
-    version "1.4.7"
-    resolved "http://172.16.104.140:4873/npm-packlist/-/npm-packlist-1.4.7.tgz#9e954365a06b80b18111ea900945af4f88ed4848"
-    integrity sha1-npVDZaBrgLGBEeqQCUWvT4jtSEg=
-    dependencies:
-      ignore-walk "^3.0.1"
-      npm-bundled "^1.0.1"
-  
   npm-run-path@^2.0.0:
     version "2.0.2"
     resolved "http://172.16.104.140:4873/npm-run-path/-/npm-run-path-2.0.2.tgz#35a9232dfa35d7067b4cb2ddf2357b1871536c5f"
@@ -6065,7 +5982,7 @@ Lockfile:
     dependencies:
       path-key "^2.0.0"
   
-  "npmlog@0 || 1 || 2 || 3 || 4", npmlog@^4.0.0, npmlog@^4.0.2:
+  "npmlog@0 || 1 || 2 || 3 || 4", npmlog@^4.0.0:
     version "4.1.2"
     resolved "http://172.16.104.140:4873/npmlog/-/npmlog-4.1.2.tgz#08a7f2a8bf734604779a9efa4ad5cc717abb954b"
     integrity sha1-CKfyqL9zRgR3mp76StXMcXq7lUs=
@@ -6315,7 +6232,7 @@ Lockfile:
     resolved "http://172.16.104.140:4873/os-tmpdir/-/os-tmpdir-1.0.2.tgz#bbe67406c79aa85c5cfec766fe5734555dfa1274"
     integrity sha1-u+Z0BseaqFxc/sdm/lc0VV36EnQ=
   
-  osenv@0, osenv@^0.1.4:
+  osenv@0:
     version "0.1.5"
     resolved "http://172.16.104.140:4873/osenv/-/osenv-0.1.5.tgz#85cdfafaeb28e8677f416e287592b5f3f49ea410"
     integrity sha1-hc36+uso6Gd/QW4odZK18/SepBA=
@@ -6690,10 +6607,10 @@ Lockfile:
       icss-replace-symbols "^1.1.0"
       postcss "^6.0.1"
   
-  postcss-plugin-constparse@1.3.27:
-    version "1.3.27"
-    resolved "http://172.16.104.140:4873/postcss-plugin-constparse/-/postcss-plugin-constparse-1.3.27.tgz#92e00ff1518074d22663a4312eba85ba5dbb033a"
-    integrity sha1-kuAP8VGAdNImY6QxLrqFul27Azo=
+  postcss-plugin-constparse@1.3.32:
+    version "1.3.32"
+    resolved "http://172.16.104.140:4873/postcss-plugin-constparse/-/postcss-plugin-constparse-1.3.32.tgz#c527c376a4dd18f22a1b74f3594abb35680fd96d"
+    integrity sha1-xSfDdqTdGPIqG3TzWUq7NWgP2W0=
     dependencies:
       postcss "^6.0.22"
   
@@ -6705,10 +6622,10 @@ Lockfile:
       object-assign "^4.1.0"
       postcss "^5.2.10"
   
-  postcss-pxtransform@1.3.27:
-    version "1.3.27"
-    resolved "http://172.16.104.140:4873/postcss-pxtransform/-/postcss-pxtransform-1.3.27.tgz#c0f9f0e8a4b64924ee6371204978bb377e91d587"
-    integrity sha1-wPnw6KS2SSTuY3EgSXi7N36R1Yc=
+  postcss-pxtransform@1.3.32:
+    version "1.3.32"
+    resolved "http://172.16.104.140:4873/postcss-pxtransform/-/postcss-pxtransform-1.3.32.tgz#501254a31072b4c9dc496f779bf801a49b1cd9fb"
+    integrity sha1-UBJUoxBytMncSW93m/gBpJsc2fs=
     dependencies:
       postcss "^6.0.16"
       postcss-pxtorem "^4.0.1"
@@ -7023,16 +6940,6 @@ Lockfile:
       http-errors "1.7.2"
       iconv-lite "0.4.24"
       unpipe "1.0.0"
-  
-  rc@^1.2.7:
-    version "1.2.8"
-    resolved "http://172.16.104.140:4873/rc/-/rc-1.2.8.tgz#cd924bf5200a075b83c188cd6b9e211b7fc0d3ed"
-    integrity sha1-zZJL9SAKB1uDwYjNa54hG3/A0+0=
-    dependencies:
-      deep-extend "^0.6.0"
-      ini "~1.3.0"
-      minimist "^1.2.0"
-      strip-json-comments "~2.0.1"
   
   react-is@^16.8.1:
     version "16.12.0"
@@ -7462,7 +7369,7 @@ Lockfile:
       convert-source-map "^0.3.3"
       css "^2.0.0"
   
-  rimraf@2, rimraf@^2.2.8, rimraf@^2.5.4, rimraf@^2.6.1, rimraf@^2.6.2, rimraf@^2.6.3:
+  rimraf@2, rimraf@^2.2.8, rimraf@^2.5.4, rimraf@^2.6.2, rimraf@^2.6.3:
     version "2.7.1"
     resolved "http://172.16.104.140:4873/rimraf/-/rimraf-2.7.1.tgz#35797f13a7fdadc566142c29d4f07ccad483e3ec"
     integrity sha1-NXl/E6f9rcVmFCwp1PB8ytSD4+w=
@@ -7567,11 +7474,6 @@ Lockfile:
     version "0.5.8"
     resolved "http://172.16.104.140:4873/sax/-/sax-0.5.8.tgz#d472db228eb331c2506b0e8c15524adb939d12c1"
     integrity sha1-1HLbIo6zMcJQaw6MFVJK25OdEsE=
-  
-  sax@^1.2.4:
-    version "1.2.4"
-    resolved "http://172.16.104.140:4873/sax/-/sax-1.2.4.tgz#2816234e2378bddc4e5354fab5caa895df7100d9"
-    integrity sha1-KBYjTiN4vdxOU1T6tcqold9xANk=
   
   schema-utils@^0.4.0, schema-utils@^0.4.4, schema-utils@^0.4.5:
     version "0.4.7"
@@ -8176,7 +8078,7 @@ Lockfile:
     resolved "http://172.16.104.140:4873/strip-indent/-/strip-indent-2.0.0.tgz#5ef8db295d01e6ed6cbf7aab96998d7822527b68"
     integrity sha1-XvjbKV0B5u1sv3qrlpmNeCJSe2g=
   
-  strip-json-comments@^2.0.1, strip-json-comments@~2.0.1:
+  strip-json-comments@^2.0.1:
     version "2.0.1"
     resolved "http://172.16.104.140:4873/strip-json-comments/-/strip-json-comments-2.0.1.tgz#3c531942e908c2697c0ec344858c286c7ca0a60a"
     integrity sha1-PFMZQukIwml8DsNEhYwobHygpgo=
@@ -8194,15 +8096,15 @@ Lockfile:
     resolved "http://172.16.104.140:4873/style-search/-/style-search-0.1.0.tgz#7958c793e47e32e07d2b5cafe5c0bf8e12e77902"
     integrity sha1-eVjHk+R+MuB9K1yv5cC/jhLneQI=
   
-  stylelint-config-taro-rn@1.3.27:
-    version "1.3.27"
-    resolved "http://172.16.104.140:4873/stylelint-config-taro-rn/-/stylelint-config-taro-rn-1.3.27.tgz#2e75735350dec88dc33e1183dddbdac256fe5fa9"
-    integrity sha1-LnVzU1DeyI3DPhGD3dvawlb+X6k=
+  stylelint-config-taro-rn@1.3.32:
+    version "1.3.32"
+    resolved "http://172.16.104.140:4873/stylelint-config-taro-rn/-/stylelint-config-taro-rn-1.3.32.tgz#3698525b795f2266f884262f3aac6349b035fb52"
+    integrity sha1-NphSW3lfImb4hCYvOqxjSbA1+1I=
   
-  stylelint-taro-rn@1.3.27:
-    version "1.3.27"
-    resolved "http://172.16.104.140:4873/stylelint-taro-rn/-/stylelint-taro-rn-1.3.27.tgz#655d9e159b5d76cb34cd61c03961ffa292ee621a"
-    integrity sha1-ZV2eFZtddss0zWHAOWH/opLuYho=
+  stylelint-taro-rn@1.3.32:
+    version "1.3.32"
+    resolved "http://172.16.104.140:4873/stylelint-taro-rn/-/stylelint-taro-rn-1.3.32.tgz#f1d920cb37d55abaeac4dfbba215fb3af374db36"
+    integrity sha1-8dkgyzfVWrrqxN+7ohX7OvN02zY=
     dependencies:
       react-native-known-styling-properties "^1.0.4"
   
@@ -8357,19 +8259,6 @@ Lockfile:
       block-stream "*"
       fstream "^1.0.12"
       inherits "2"
-  
-  tar@^4.4.2:
-    version "4.4.13"
-    resolved "http://172.16.104.140:4873/tar/-/tar-4.4.13.tgz#43b364bc52888d555298637b10d60790254ab525"
-    integrity sha1-Q7NkvFKIjVVSmGN7ENYHkCVKtSU=
-    dependencies:
-      chownr "^1.1.1"
-      fs-minipass "^1.2.5"
-      minipass "^2.8.6"
-      minizlib "^1.2.1"
-      mkdirp "^0.5.0"
-      safe-buffer "^5.1.2"
-      yallist "^3.0.3"
   
   taro-ui@^2.2.4:
     version "2.2.4"
@@ -9180,7 +9069,7 @@ Lockfile:
     resolved "http://172.16.104.140:4873/yallist/-/yallist-2.1.2.tgz#1c11f9218f076089a47dd512f93c6699a6a81d52"
     integrity sha1-HBH5IY8HYImkfdUS+TxmmaaoHVI=
   
-  yallist@^3.0.0, yallist@^3.0.2, yallist@^3.0.3:
+  yallist@^3.0.2:
     version "3.1.1"
     resolved "http://172.16.104.140:4873/yallist/-/yallist-3.1.1.tgz#dbb7daf9bfd8bac9ab45ebf602b8cbad0d5d08fd"
     integrity sha1-27fa+b/YusmrRev2ArjLrQ1dCP0=
