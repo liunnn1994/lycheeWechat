@@ -2,6 +2,7 @@
   <dictionary name="keepsoft">
     <words>
       <w>phpsessid</w>
+      <w>soter</w>
     </words>
   </dictionary>
 </component>

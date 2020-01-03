@@ -57,21 +57,24 @@ export default class GalleryDetails extends Component<IProps, IState> {
     Taro.setNavigationBarTitle({
       title
     });
+    const password = Taro.getStorageSync(id);
     this.setState(
       {
         id,
         title,
         scrollViewHeight: Taro.getSystemInfoSync().windowHeight,
-        lock: lock === "true"
+        lock: lock === "true",
+        password
       },
       () => {
         if (lock !== "true") {
           this.getAllImages(id);
+        } else if (password) {
+          this.handleConfirm();
         }
       }
     );
   }
-
   async getAllImages(id: string, password = "") {
     getImagesByAlbumID(id, password).then(res => {
       let allPhotos = res.data.photos;
@@ -104,7 +107,6 @@ export default class GalleryDetails extends Component<IProps, IState> {
     return new Promise(resolve => {
       const { allPhotos, photos } = this.state;
       let loadIndex = index + 50;
-      console.log(index);
       if (index > allPhotos.length) {
         resolve("finished");
         return;
@@ -153,6 +155,7 @@ export default class GalleryDetails extends Component<IProps, IState> {
         this.setState({
           lock: false
         });
+        Taro.setStorageSync(id, password);
       } else {
         message("密码错误！", "none");
       }
@@ -193,14 +196,15 @@ export default class GalleryDetails extends Component<IProps, IState> {
             <AtInput
               name="value"
               title="密码"
-              type="text"
+              type="password"
               placeholder="请输入密码"
               value={this.state.password}
               onChange={this.handleChangePassword.bind(this)}
+              onConfirm={this.handleConfirm.bind(this)}
             />
           </AtModalContent>
           <AtModalAction>
-            <Button onClick={this.handleConfirm}>确定</Button>
+            <Button onClick={this.handleConfirm.bind(this)}>确定</Button>
           </AtModalAction>
         </AtModal>
       </View>

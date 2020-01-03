@@ -142,7 +142,7 @@ export default class Gallery extends Component<IProps, IState> {
   onShareAppMessage() {
     return {
       title: "欢迎光临刘家大宅院",
-      path: "/page/index/index",
+      path: "/pages/index/index",
       imageUrl
     };
   }
